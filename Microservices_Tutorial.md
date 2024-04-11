@@ -367,7 +367,13 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 ## Limits Microservice
 
-- [Starting Project (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=limit-service&name=limit-service&description=Limit%20Microservice&packageName=com.swarna.microservices.limit-service&dependencies=web,devtools,actuator,lombok,cloud-config-client)
+- [Starting Project - Limits Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=limit-service&name=limit-service&description=Limit%20Microservice&packageName=com.swarna.microservices.limit-service&dependencies=web,devtools,actuator,lombok,cloud-config-client)
 
 
+
+
+
+## Config Server Microservice
+
+- [Starting Project - Config Server Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=config-server&name=config-server&description=Centralized%20config%20server%20microservice&packageName=com.swarna.microservices.config-server&dependencies=devtools,cloud-config-server)
 
