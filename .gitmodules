@@ -1,0 +1,3 @@
+[submodule "currency-config-repo"]
+	path = currency-config-repo
+	url = https://github.com/SwarnadeepGhosh/currency-config-repo

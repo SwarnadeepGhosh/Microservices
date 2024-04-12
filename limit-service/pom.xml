@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.swarna.microservices</groupId>
-	<artifactId>limit-service</artifactId>
+	<artifactId>limits-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>limit-service</name>
+	<name>limits-service</name>
 	<description>Limit Microservice</description>
 	<properties>
 		<java.version>21</java.version>
