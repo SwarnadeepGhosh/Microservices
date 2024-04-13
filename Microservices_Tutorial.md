@@ -335,8 +335,8 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 | Application                                  | URL                                                          |
 | -------------------------------------------- | ------------------------------------------------------------ |
-| Limits Service                               | http://localhost:8080/limits http://localhost:8080/actuator/refresh (POST) |
-| Spring Cloud Config Server                   | http://localhost:8888/limits-service/default http://localhost:8888/limits-service/dev |
+| Limits Service                               | http://localhost:8080/limits <br />http://localhost:8080/actuator/refresh (POST) |
+| Spring Cloud Config Server                   | http://localhost:8888/limits-service/default <br />http://localhost:8888/limits-service/dev |
 | Currency Converter Service - Direct Call     | http://localhost:8100/currency-converter/from/USD/to/INR/quantity/10 |
 | Currency Converter Service - Feign           | http://localhost:8100/currency-converter-feign/from/EUR/to/INR/quantity/10000 |
 | Currency Exchange Service                    | http://localhost:8000/currency-exchange/from/EUR/to/INR http://localhost:8001/currency-exchange/from/USD/to/INR |
@@ -346,6 +346,8 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 | Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bus-refresh (POST)            |
 
 
+
+---
 
 # Microservices(V2)
 
@@ -365,9 +367,46 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 <img src="images/dia1.png" alt="transport" style="zoom: 43%;" />
 
-## Limits Microservice
+## Git Repo (Config Repo)
 
-- [Starting Project - Limits Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=limit-service&name=limit-service&description=Limit%20Microservice&packageName=com.swarna.microservices.limit-service&dependencies=web,devtools,actuator,lombok,cloud-config-client)
+- [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
+
+- File name pattern : **`<microservice-name>-<profile>.properties`**
+
+- Spring Cloud Config Repository is having highest priority. That means, if someone write same property within project and also he is fetching that property value from Git repo, then the property of git repo will overwrite the property value present in microservice property file.
+
+- **STEP 1:** Create property files
+
+  - ***limits-service.properties***
+
+    ```properties
+    limits.service.minimum=4
+    limits.service.maximum=996
+    ```
+
+  - ***limits-service-dev.properties***
+
+    ```properties
+    limits.service.minimum=5
+    limits.service.maximum=995
+    ```
+
+  - ***limits-service-qa.properties***
+
+    ```properties
+    limits.service.minimum=6
+    limits.service.maximum=994
+    ```
+
+- **STEP 2:** Initialize a git repository and push changes into master branch 
+
+  - ```sh
+    $ git init
+    $ git add .
+    $ git commit -m "added files"
+    ```
+
+  - If its a remote branch , then we need to create api key from : Github > Settings > Developer Settings 
 
 
 
@@ -377,3 +416,162 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 - [Starting Project - Config Server Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=config-server&name=config-server&description=Centralized%20config%20server%20microservice&packageName=com.swarna.microservices.config-server&dependencies=devtools,cloud-config-server)
 
+- [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
+
+- Connecting with Git Repo : 
+
+  - **STEP 1** : Import downloaded Zip from start.spring.io and add `@EnableConfigServer` annotation in main class : ***ConfigServerApplication.java***
+
+    ```java
+    import org.springframework.cloud.config.server.EnableConfigServer;
+    
+    @EnableConfigServer
+    @SpringBootApplication
+    public class ConfigServerApplication {
+        public static void main(String[] args) { SpringApplication.run(ConfigServerApplication.class, args); }
+    }
+    ```
+
+  - **STEP 2**: ***application.properties***
+
+    ```properties
+    spring.application.name=config-server
+    server.port=8888
+    
+    #Sample URI for local git repo in Windows local system
+    #spring.cloud.config.server.git.uri=file:///D:/Microservices/config-repo
+    
+    #Sample URI for Git repo from Github
+    spring.cloud.config.server.git.uri=https://github.com/SwarnadeepGhosh/currency-config-repo
+    spring.cloud.config.server.git.default-label=master
+    spring.cloud.config.server.git.username=SwarnadeepGhosh
+    spring.cloud.config.server.git.password=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
+    #spring.cloud.config.server.git.ignore-local-ssh-settings=true
+    #spring.cloud.config.server.git.private-key=<private-key>
+    ```
+
+  - **STEP 3**: Fetch Config using GET api calls : 
+
+    - Default: [http://localhost:8888/limits-service/default](http://localhost:8888/limits-service/default)
+    - Dev: [http://localhost:8888/limits-service/dev](http://localhost:8888/limits-service/dev)
+    - Qa: [http://localhost:8888/limits-service/qa](http://localhost:8888/limits-service/qa)
+
+
+
+
+
+
+## Limits Microservice
+
+- [Starting Project - Limits Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=limit-service&name=limit-service&description=Limit%20Microservice&packageName=com.swarna.microservices.limit-service&dependencies=web,devtools,actuator,lombok,cloud-config-client)
+
+- [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
+
+- Connecting with Config server and eventually fetching config from config repo : 
+
+  - **STEP 1** : Import downloaded Zip from start.spring.io and add below in ***application.properties***
+
+    ```properties
+    spring.application.name=limits-service
+    spring.config.import=optional:configserver:http://localhost:8888
+    
+    spring.profiles.active=dev
+    spring.cloud.profiles.active=dev
+    ```
+
+  - **STEP 2**: ***PropertyConfig.java*** - This will fetch data from property files, so that we can use it in application.
+
+    ```java
+    @ConfigurationProperties("limits.service")
+    @Component
+    @Data
+    public class PropertyConfig {
+        private int minimum;
+        private int maximum;
+    }
+    ```
+
+  - **STEP 3**: ***LimitController.java*** - This will fetch data from property files, so that we can use it in application.
+
+    ```java
+    @RestController
+    public class LimitController {
+    
+        @Autowired
+        PropertyConfig propertyConfig;
+    
+        @GetMapping("/limits")
+        public Limits retrieveLimits(){
+            return new Limits(propertyConfig.getMinimum(), propertyConfig.getMaximum());
+        }
+    }
+    ```
+
+  - **STEP 3**: Fetch response using GET api calls : [http://localhost:8080/limits](http://localhost:8080/limits) . Here property coming from git repo to config server and to limit service.
+
+
+
+## Currency Exchange
+
+- URLs
+
+  - [Starting Project - Currency Exchange Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=currency-exchange&name=currency-exchange&description=Currency%20Exchange%20Microservice&packageName=com.swarna.microservices.currency-exchange&dependencies=web,devtools,actuator,lombok,cloud-config-client)
+  - [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
+  - H2 Console : [http://localhost:8000/h2-console](http://localhost:8000/h2-console)
+  - [http://localhost:8000/currency-exchange/from/USD/to/INR](http://localhost:8000/currency-exchange/from/USD/to/INR)
+
+- **Service Working example :** 
+
+  - If you ask it the value of 1 USD in INR, or 1 Australian Dollar in INR, the Currency Exchange Service answers
+
+    - 1 USD is 60 INR
+    - 1 Australian Dollars is 50 INR.
+
+    GET : http://localhost:8000/currency-exchange/from/EUR/to/INR
+
+    ```json
+    {
+      "id": 10002,
+      "from": "EUR",
+      "to": "INR",
+      "conversionMultiple": 75.00,
+      "exchangeEnvironmentInfo": "37f1ad927c6e v1 27c6e"
+    }
+    ```
+
+- 
+
+
+
+## Currency Conversion
+
+- URLs
+
+  - [Starting Project - Currency Exchange Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=currency-exchange&name=currency-exchange&description=Currency%20Exchange%20Microservice&packageName=com.swarna.microservices.currency-exchange&dependencies=web,devtools,actuator,lombok,cloud-config-client)
+- [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
+  - H2 Console : [http://localhost:8000/h2-console](http://localhost:8000/h2-console)
+  - [http://localhost:8000/currency-exchange/from/USD/to/INR](http://localhost:8000/currency-exchange/from/USD/to/INR)
+
+- **Service Working example :** 
+
+  - Currency Conversion Service is used to convert a bucket of currencies. If you want to find the value of 10 USD, Currency Conversion Service returns 600.
+
+    - **STEP 1** : Currency Conversion Service calls the Currency Exchange Service for the value of 1 USD. It gets a response back saying 60.
+    - **STEP 2** : The Currency Conversion Service then multiplies 10 by 60, and returns 600 back.
+
+    GET : http://localhost:8100/currency-conversion/from/EUR/to/INR/quantity/10
+
+    ```json
+    {
+      "id": 10002,
+      "from": "EUR",
+      "to": "INR",
+      "conversionMultiple": 75.00,
+      "quantity": 10,
+      "totalCalculatedAmount": 750.00,
+      "exchangeEnvironmentInfo": "37f1ad927c6e v1 27c6e",
+      "conversionEnvironmentInfo": "fb6316b5713d v1 5713d"
+    }
+    ```
+
+    
