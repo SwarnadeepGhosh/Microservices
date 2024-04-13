@@ -547,11 +547,10 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 - URLs
 
-  - [Starting Project - Currency Exchange Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=currency-exchange&name=currency-exchange&description=Currency%20Exchange%20Microservice&packageName=com.swarna.microservices.currency-exchange&dependencies=web,devtools,actuator,lombok,cloud-config-client)
-- [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
-  - H2 Console : [http://localhost:8000/h2-console](http://localhost:8000/h2-console)
-  - [http://localhost:8000/currency-exchange/from/USD/to/INR](http://localhost:8000/currency-exchange/from/USD/to/INR)
-
+  - [Starting Project - Currency Conversion Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=currency-conversion&name=currency-conversion&description=Currency%20Conversion%20Microservice&packageName=com.swarna.microservices.currency-conversion&dependencies=web,devtools,actuator,lombok,cloud-config-client)
+  - [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
+  - [http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10)
+  
 - **Service Working example :** 
 
   - Currency Conversion Service is used to convert a bucket of currencies. If you want to find the value of 10 USD, Currency Conversion Service returns 600.
