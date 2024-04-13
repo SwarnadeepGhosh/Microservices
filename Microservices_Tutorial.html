@@ -123,10 +123,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           id="toc-standardized-urls">Standardized URLs</a></li>
           </ul></li>
           <li><a href="#microservicesv2"
-          id="toc-microservicesv2">Microservices(V2)</a>
+          id="toc-microservicesv2"><strong>Microservices(V2)</strong></a>
           <ul>
+          <li><a href="#currency-config-repository"
+          id="toc-currency-config-repository">Currency Config
+          Repository</a></li>
+          <li><a href="#config-server-microservice"
+          id="toc-config-server-microservice">Config Server
+          Microservice</a></li>
           <li><a href="#limits-microservice"
           id="toc-limits-microservice">Limits Microservice</a></li>
+          <li><a href="#currency-exchange"
+          id="toc-currency-exchange">Currency Exchange</a></li>
+          <li><a href="#currency-conversion"
+          id="toc-currency-conversion">Currency Conversion</a>
+          <ul>
+          <li><a href="#feign-client-integration"
+          id="toc-feign-client-integration">Feign Client
+          Integration</a></li>
+          </ul></li>
+          <li><a href="#eureka-naming-server"
+          id="toc-eureka-naming-server">Eureka Naming Server</a></li>
           </ul></li>
           </ul>
         </div>
@@ -529,13 +546,13 @@ Config Server</em></strong></li>
 <tbody>
 <tr class="odd">
 <td>Limits Service</td>
-<td>http://localhost:8080/limits http://localhost:8080/actuator/refresh
-(POST)</td>
+<td>http://localhost:8080/limits
+<br />http://localhost:8080/actuator/refresh (POST)</td>
 </tr>
 <tr class="even">
 <td>Spring Cloud Config Server</td>
 <td>http://localhost:8888/limits-service/default
-http://localhost:8888/limits-service/dev</td>
+<br />http://localhost:8888/limits-service/dev</td>
 </tr>
 <tr class="odd">
 <td>Currency Converter Service - Direct Call</td>
@@ -569,7 +586,8 @@ http://localhost:8765/currency-conversion-service/currency-converter-feign/from/
 </tr>
 </tbody>
 </table>
-<h1 id="microservicesv2">Microservices(V2)</h1>
+<hr />
+<h1 id="microservicesv2"><strong>Microservices(V2)</strong></h1>
 <p><strong>Problems and Solutions for each problem :</strong></p>
 <ul>
 <li>CENTRALIZED CONFIGURATION MANAGEMENT - <strong><em>Spring Cloud
@@ -592,11 +610,289 @@ Metrics</li>
 <li><strong>Micrometer</strong> (Replaces Spring Cloud Sleuth)</li>
 </ul>
 <p><img src="images/dia1.png" alt="transport" style="zoom: 43%;" /></p>
+<h2 id="currency-config-repository">Currency Config Repository</h2>
+<ul>
+<li><p><a href="https://github.com/SwarnadeepGhosh/Microservices">Git
+Repo Link</a></p></li>
+<li><p>File name pattern :
+<strong><code>&lt;microservice-name&gt;-&lt;profile&gt;.properties</code></strong></p></li>
+<li><p>Spring Cloud Config Repository is having highest priority. That
+means, if someone write same property within project and also he is
+fetching that property value from Git repo, then the property of git
+repo will overwrite the property value present in microservice property
+file.</p></li>
+<li><p><strong>STEP 1:</strong> Create property files</p>
+<ul>
+<li><p><strong><em>limits-service.properties</em></strong></p>
+<pre class="properties"><code>limits.service.minimum=4
+limits.service.maximum=996</code></pre></li>
+<li><p><strong><em>limits-service-dev.properties</em></strong></p>
+<pre class="properties"><code>limits.service.minimum=5
+limits.service.maximum=995</code></pre></li>
+<li><p><strong><em>limits-service-qa.properties</em></strong></p>
+<pre class="properties"><code>limits.service.minimum=6
+limits.service.maximum=994</code></pre></li>
+</ul></li>
+<li><p><strong>STEP 2:</strong> Initialize a git repository and push
+changes into master branch</p>
+<ul>
+<li><div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">$</span> git init</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">$</span> git add .</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">$</span> git commit <span class="at">-m</span> <span class="st">&quot;added files&quot;</span></span></code></pre></div></li>
+<li>If its a remote branch , then we need to create api key from :
+Github &gt; Settings &gt; Developer Settings</li>
+</ul></li>
+</ul>
+<hr />
+<h2 id="config-server-microservice">Config Server Microservice</h2>
+<ul>
+<li><p><a
+href="https://start.spring.io/#!type=maven-project&amp;language=java&amp;platformVersion=3.2.4&amp;packaging=jar&amp;jvmVersion=21&amp;groupId=com.swarna.microservices&amp;artifactId=config-server&amp;name=config-server&amp;description=Centralized%20config%20server%20microservice&amp;packageName=com.swarna.microservices.config-server&amp;dependencies=devtools,cloud-config-server">Starting
+Project - Config Server Microservice (Spring.io)</a></p></li>
+<li><p><a href="https://github.com/SwarnadeepGhosh/Microservices">Git
+Repo Link</a></p></li>
+<li><p>Connecting with Git Repo :</p>
+<ul>
+<li><p><strong>STEP 1</strong> : Import downloaded Zip from
+start.spring.io and add <code>@EnableConfigServer</code> annotation in
+main class : <strong><em>ConfigServerApplication.java</em></strong></p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">config</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">EnableConfigServer</span><span class="op">;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">@EnableConfigServer</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">@SpringBootApplication</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> ConfigServerApplication <span class="op">{</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span> SpringApplication<span class="op">.</span><span class="fu">run</span><span class="op">(</span>ConfigServerApplication<span class="op">.</span><span class="fu">class</span><span class="op">,</span> args<span class="op">);</span> <span class="op">}</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<li><p><strong>STEP 2</strong>:
+<strong><em>application.properties</em></strong></p>
+<pre class="properties"><code>spring.application.name=config-server
+server.port=8888
+
+#Sample URI for local git repo in Windows local system
+#spring.cloud.config.server.git.uri=file:///D:/Microservices/config-repo
+
+#Sample URI for Git repo from Github
+spring.cloud.config.server.git.uri=https://github.com/SwarnadeepGhosh/currency-config-repo
+spring.cloud.config.server.git.default-label=master
+spring.cloud.config.server.git.username=SwarnadeepGhosh
+spring.cloud.config.server.git.password=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
+#spring.cloud.config.server.git.ignore-local-ssh-settings=true
+#spring.cloud.config.server.git.private-key=&lt;private-key&gt;</code></pre></li>
+<li><p><strong>STEP 3</strong>: Fetch Config using GET api calls :</p>
+<ul>
+<li>Default: <a
+href="http://localhost:8888/limits-service/default">http://localhost:8888/limits-service/default</a></li>
+<li>Dev: <a
+href="http://localhost:8888/limits-service/dev">http://localhost:8888/limits-service/dev</a></li>
+<li>Qa: <a
+href="http://localhost:8888/limits-service/qa">http://localhost:8888/limits-service/qa</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<hr />
 <h2 id="limits-microservice">Limits Microservice</h2>
 <ul>
-<li><a
+<li><p><a
 href="https://start.spring.io/#!type=maven-project&amp;language=java&amp;platformVersion=3.2.4&amp;packaging=jar&amp;jvmVersion=21&amp;groupId=com.swarna.microservices&amp;artifactId=limit-service&amp;name=limit-service&amp;description=Limit%20Microservice&amp;packageName=com.swarna.microservices.limit-service&amp;dependencies=web,devtools,actuator,lombok,cloud-config-client">Starting
-Project (Spring.io)</a></li>
+Project - Limits Microservice (Spring.io)</a></p></li>
+<li><p><a href="https://github.com/SwarnadeepGhosh/Microservices">Git
+Repo Link</a></p></li>
+<li><p>Connecting with Config server and eventually fetching config from
+config repo :</p>
+<ul>
+<li><p><strong>STEP 1</strong> : Import downloaded Zip from
+start.spring.io and add below in
+<strong><em>application.properties</em></strong></p>
+<pre class="properties"><code>spring.application.name=limits-service
+spring.config.import=optional:configserver:http://localhost:8888
+
+spring.profiles.active=dev
+spring.cloud.profiles.active=dev</code></pre></li>
+<li><p><strong>STEP 2</strong>:
+<strong><em>PropertyConfig.java</em></strong> - This will fetch data
+from property files, so that we can use it in application.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="at">@ConfigurationProperties</span><span class="op">(</span><span class="st">&quot;limits.service&quot;</span><span class="op">)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="at">@Component</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="at">@Data</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> PropertyConfig <span class="op">{</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">int</span> minimum<span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">int</span> maximum<span class="op">;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<li><p><strong>STEP 3</strong>:
+<strong><em>LimitController.java</em></strong> - This will fetch data
+from property files, so that we can use it in application.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> LimitController <span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Autowired</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    PropertyConfig propertyConfig<span class="op">;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/limits&quot;</span><span class="op">)</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> Limits <span class="fu">retrieveLimits</span><span class="op">(){</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">new</span> <span class="fu">Limits</span><span class="op">(</span>propertyConfig<span class="op">.</span><span class="fu">getMinimum</span><span class="op">(),</span> propertyConfig<span class="op">.</span><span class="fu">getMaximum</span><span class="op">());</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<li><p><strong>STEP 3</strong>: Fetch response using GET api calls : <a
+href="http://localhost:8080/limits">http://localhost:8080/limits</a> .
+Here property coming from git repo to config server and to limit
+service.</p></li>
+</ul></li>
+</ul>
+<hr />
+<h2 id="currency-exchange">Currency Exchange</h2>
+<ul>
+<li><p>URLs</p>
+<ul>
+<li><a
+href="https://start.spring.io/#!type=maven-project&amp;language=java&amp;platformVersion=3.2.4&amp;packaging=jar&amp;jvmVersion=21&amp;groupId=com.swarna.microservices&amp;artifactId=currency-exchange&amp;name=currency-exchange&amp;description=Currency%20Exchange%20Microservice&amp;packageName=com.swarna.microservices.currency-exchange&amp;dependencies=web,devtools,actuator,lombok,cloud-config-client">Starting
+Project - Currency Exchange Microservice (Spring.io)</a></li>
+<li><a href="https://github.com/SwarnadeepGhosh/Microservices">Git Repo
+Link</a></li>
+<li>H2 Console : <a
+href="http://localhost:8000/h2-console">http://localhost:8000/h2-console</a></li>
+<li><a
+href="http://localhost:8000/currency-exchange/from/USD/to/INR">http://localhost:8000/currency-exchange/from/USD/to/INR</a></li>
+</ul></li>
+<li><p><strong>Service Working example :</strong></p>
+<ul>
+<li><p>If you ask it the value of 1 USD in INR, or 1 Australian Dollar
+in INR, the Currency Exchange Service answers</p>
+<ul>
+<li>1 USD is 60 INR</li>
+<li>1 Australian Dollars is 50 INR.</li>
+</ul>
+<p>GET : http://localhost:8000/currency-exchange/from/EUR/to/INR</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10002</span><span class="fu">,</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;EUR&quot;</span><span class="fu">,</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="fl">75.00</span><span class="fu">,</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;exchangeEnvironmentInfo&quot;</span><span class="fu">:</span> <span class="st">&quot;37f1ad927c6e v1 27c6e&quot;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ul></li>
+<li><p><strong><em>application.properties</em></strong></p>
+<pre class="properties"><code>spring.application.name=currency-exchange
+server.port=8000
+
+spring.jpa.show-sql=true
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.jpa.defer-datasource-initialization=true
+spring.h2.console.enabled=true
+
+spring.config.import=optional:configserver:
+
+spring.devtools.restart.poll-interval=2s
+spring.devtools.restart.quiet-period=1s
+spring.devtools.livereload.port=35731</code></pre></li>
+</ul>
+<hr />
+<h2 id="currency-conversion">Currency Conversion</h2>
+<ul>
+<li><p>URLs</p>
+<ul>
+<li><a
+href="https://start.spring.io/#!type=maven-project&amp;language=java&amp;platformVersion=3.2.4&amp;packaging=jar&amp;jvmVersion=21&amp;groupId=com.swarna.microservices&amp;artifactId=currency-conversion&amp;name=currency-conversion&amp;description=Currency%20Conversion%20Microservice&amp;packageName=com.swarna.microservices.currency-conversion&amp;dependencies=web,devtools,actuator,lombok,cloud-config-client">Starting
+Project - Currency Conversion Microservice (Spring.io)</a></li>
+<li><a href="https://github.com/SwarnadeepGhosh/Microservices">Git Repo
+Link</a></li>
+<li><a
+href="http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10">http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10</a></li>
+</ul></li>
+<li><p><strong>Service Working example :</strong></p>
+<ul>
+<li><p>Currency Conversion Service is used to convert a bucket of
+currencies. If you want to find the value of 10 USD, Currency Conversion
+Service returns 600.</p>
+<ul>
+<li><strong>STEP 1</strong> : Currency Conversion Service calls the
+Currency Exchange Service for the value of 1 USD. It gets a response
+back saying 60.</li>
+<li><strong>STEP 2</strong> : The Currency Conversion Service then
+multiplies 10 by 60, and returns 600 back.</li>
+</ul>
+<p>GET :
+http://localhost:8100/currency-conversion/from/EUR/to/INR/quantity/10</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10002</span><span class="fu">,</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;EUR&quot;</span><span class="fu">,</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="fl">75.00</span><span class="fu">,</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;quantity&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;totalCalculatedAmount&quot;</span><span class="fu">:</span> <span class="fl">750.00</span><span class="fu">,</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;exchangeEnvironmentInfo&quot;</span><span class="fu">:</span> <span class="st">&quot;37f1ad927c6e v1 27c6e&quot;</span><span class="fu">,</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionEnvironmentInfo&quot;</span><span class="fu">:</span> <span class="st">&quot;fb6316b5713d v1 5713d&quot;</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ul></li>
+</ul>
+<h3 id="feign-client-integration">Feign Client Integration</h3>
+<ul>
+<li><p>Most easiest Rest Template call</p></li>
+<li><p><strong><em>application.properties</em></strong></p>
+<pre class="properties"><code>spring.application.name=currency-conversion
+server.port=8100
+
+spring.config.import=optional:configserver:
+currency-exchange.url=http://localhost:8000
+
+spring.devtools.restart.poll-interval=2s
+spring.devtools.restart.quiet-period=1s
+spring.devtools.livereload.port=35730</code></pre></li>
+<li><p>Main Interface to make Feign Client Calls :
+<strong><em>CurrencyExchangeProxy.java</em></strong></p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">openfeign</span><span class="op">.</span><span class="im">FeignClient</span><span class="op">;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">web</span><span class="op">.</span><span class="im">bind</span><span class="op">.</span><span class="im">annotation</span><span class="op">.</span><span class="im">GetMapping</span><span class="op">;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">web</span><span class="op">.</span><span class="im">bind</span><span class="op">.</span><span class="im">annotation</span><span class="op">.</span><span class="im">PathVariable</span><span class="op">;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="at">@FeignClient</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;currency-exchange&quot;</span><span class="op">,</span> url <span class="op">=</span> <span class="st">&quot;${currency-exchange.url}&quot;</span><span class="op">)</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">interface</span> CurrencyExchangeProxy <span class="op">{</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/currency-exchange/from/{from}/to/{to}&quot;</span><span class="op">)</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> CurrencyConversion <span class="fu">retrieveExchangeValue</span><span class="op">(</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> from<span class="op">,</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> to<span class="op">);</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<li><p><strong><em>CurrencyConversionController.java</em></strong></p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> CurrencyConversionController <span class="op">{</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Autowired</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> CurrencyExchangeProxy proxy<span class="op">;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/currency-conversion/from/{from}/to/{to}/quantity/{quantity}&quot;</span><span class="op">)</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> CurrencyConversion <span class="fu">calculateCurrencyConversionFeign</span><span class="op">(</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">@PathVariable</span> <span class="bu">String</span> from<span class="op">,</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">@PathVariable</span> <span class="bu">String</span> to<span class="op">,</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">@PathVariable</span> <span class="bu">BigDecimal</span> quantity</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>        CurrencyConversion currencyConversion <span class="op">=</span> proxy<span class="op">.</span><span class="fu">retrieveExchangeValue</span><span class="op">(</span>from<span class="op">,</span> to<span class="op">);</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> CurrencyConversion<span class="op">.</span><span class="fu">builder</span><span class="op">()</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">id</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getId</span><span class="op">())</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">from</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getFrom</span><span class="op">())</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">to</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getTo</span><span class="op">())</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">quantity</span><span class="op">(</span>quantity<span class="op">)</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">conversionMultiple</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getConversionMultiple</span><span class="op">())</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">totalCalculatedAmount</span><span class="op">(</span>quantity<span class="op">.</span><span class="fu">multiply</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getConversionMultiple</span><span class="op">()))</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">environment</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getEnvironment</span><span class="op">()</span> <span class="op">+</span> <span class="st">&quot; feign&quot;</span><span class="op">)</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">build</span><span class="op">();</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+</ul>
+<hr />
+<h2 id="eureka-naming-server">Eureka Naming Server</h2>
+<p><img src="images/namingServer.png" alt="transport" style="zoom: 67%;" /></p>
+<ul>
+<li>Also called <strong>Service Registry</strong></li>
+<li></li>
 </ul>
         </div>
       </div>

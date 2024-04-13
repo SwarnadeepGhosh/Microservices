@@ -349,7 +349,7 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 ---
 
-# Microservices(V2)
+# **Microservices(V2)**
 
 **Problems and Solutions for each problem :** 
 
@@ -367,7 +367,7 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 <img src="images/dia1.png" alt="transport" style="zoom: 43%;" />
 
-## Git Repo (Config Repo)
+## Currency Config Repository
 
 - [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
 
@@ -410,7 +410,7 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 
 
-
+---
 
 ## Config Server Microservice
 
@@ -458,7 +458,7 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 
 
-
+---
 
 
 ## Limits Microservice
@@ -511,6 +511,8 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 
 
+---
+
 ## Currency Exchange
 
 - URLs
@@ -539,9 +541,27 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
     }
     ```
 
-- 
+- ***application.properties***
 
+  ```properties
+  spring.application.name=currency-exchange
+  server.port=8000
+  
+  spring.jpa.show-sql=true
+  spring.datasource.url=jdbc:h2:mem:testdb
+  spring.jpa.defer-datasource-initialization=true
+  spring.h2.console.enabled=true
+  
+  spring.config.import=optional:configserver:
+  
+  spring.devtools.restart.poll-interval=2s
+  spring.devtools.restart.quiet-period=1s
+  spring.devtools.livereload.port=35731
+  ```
 
+  
+
+---
 
 ## Currency Conversion
 
@@ -573,4 +593,80 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
     }
     ```
 
-    
+
+### Feign Client Integration
+
+- Most easiest Rest Template call
+
+- ***application.properties***
+
+  ```properties
+  spring.application.name=currency-conversion
+  server.port=8100
+  
+  spring.config.import=optional:configserver:
+  currency-exchange.url=http://localhost:8000
+  
+  spring.devtools.restart.poll-interval=2s
+  spring.devtools.restart.quiet-period=1s
+  spring.devtools.livereload.port=35730
+  ```
+
+- Main Interface to make Feign Client Calls : ***CurrencyExchangeProxy.java***
+
+  ```java
+  import org.springframework.cloud.openfeign.FeignClient;
+  import org.springframework.web.bind.annotation.GetMapping;
+  import org.springframework.web.bind.annotation.PathVariable;
+  
+  @FeignClient(name = "currency-exchange", url = "${currency-exchange.url}")
+  public interface CurrencyExchangeProxy {
+  
+      @GetMapping("/currency-exchange/from/{from}/to/{to}")
+      public CurrencyConversion retrieveExchangeValue(
+              @PathVariable String from,
+              @PathVariable String to);
+  }
+  ```
+
+- ***CurrencyConversionController.java***
+
+  ```java
+  @RestController
+  public class CurrencyConversionController {
+  
+      @Autowired
+      private CurrencyExchangeProxy proxy;
+  
+      @GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
+      public CurrencyConversion calculateCurrencyConversionFeign(
+          @PathVariable String from,
+          @PathVariable String to,
+          @PathVariable BigDecimal quantity
+      ) {
+  
+          CurrencyConversion currencyConversion = proxy.retrieveExchangeValue(from, to);
+  
+          return CurrencyConversion.builder()
+              .id(currencyConversion.getId())
+              .from(currencyConversion.getFrom())
+              .to(currencyConversion.getTo())
+              .quantity(quantity)
+              .conversionMultiple(currencyConversion.getConversionMultiple())
+              .totalCalculatedAmount(quantity.multiply(currencyConversion.getConversionMultiple()))
+              .environment(currencyConversion.getEnvironment() + " feign")
+              .build();
+      }
+  }
+  ```
+
+
+
+---
+
+## Eureka Naming Server 
+
+<img src="images/namingServer.png" alt="transport" style="zoom: 67%;" />
+
+- Also called **Service Registry**
+- 
