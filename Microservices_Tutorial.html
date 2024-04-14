@@ -144,6 +144,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </ul></li>
           <li><a href="#eureka-naming-server"
           id="toc-eureka-naming-server">Eureka Naming Server</a></li>
+          <li><a href="#load-balancing" id="toc-load-balancing">Load
+          Balancing</a></li>
           </ul></li>
           </ul>
         </div>
@@ -891,9 +893,62 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb21-1"><a href=
 <h2 id="eureka-naming-server">Eureka Naming Server</h2>
 <p><img src="images/namingServer.png" alt="transport" style="zoom: 67%;" /></p>
 <ul>
-<li>Also called <strong>Service Registry</strong></li>
-<li></li>
+<li><p>Also called <strong>Service Registry</strong></p></li>
+<li><p>URLs</p>
+<ul>
+<li><a
+href="https://start.spring.io/#!type=maven-project&amp;language=java&amp;platformVersion=3.2.4&amp;packaging=jar&amp;jvmVersion=21&amp;groupId=com.swarna.microservices&amp;artifactId=naming-server&amp;name=naming-server&amp;description=spring-cloud-netflix%20Eureka%20Naming%20Server%20Microservice&amp;packageName=com.swarna.microservices.naming-server&amp;dependencies=devtools,actuator,cloud-eureka-server">Starting
+Project - Eureka naming Server Microservice (Spring.io)</a></li>
+<li><a href="https://github.com/SwarnadeepGhosh/Microservices">Git Repo
+Link</a></li>
+<li><a href="http://localhost:8761/">Eureka Console -
+http://localhost:8761/</a></li>
+</ul></li>
+<li><p><strong>Setting up Eureka Naming Server:</strong></p>
+<ul>
+<li><p><strong><em>application.properties</em></strong></p>
+<pre class="properties"><code>spring.application.name=naming-server
+server.port=8761
+
+# We don&#39;t want this specific server to be registered with itself
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false</code></pre></li>
+<li><p><strong><em>NamingServerApplication.java</em></strong></p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">netflix</span><span class="op">.</span><span class="im">eureka</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">EnableEurekaServer</span><span class="op">;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="at">@EnableEurekaServer</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="at">@SpringBootApplication</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> NamingServerApplication <span class="op">{</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>        SpringApplication<span class="op">.</span><span class="fu">run</span><span class="op">(</span>NamingServerApplication<span class="op">.</span><span class="fu">class</span><span class="op">,</span> args<span class="op">);</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+</ul></li>
+<li><p><strong>Registering other microservices with Eureka Naming Server
+:</strong></p>
+<ul>
+<li><p><strong><em>pom.xml</em></strong> - add this dependency.</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;org.springframework.cloud&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;spring-cloud-starter-netflix-eureka-client&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
+<li><p><strong><em>application.properties</em></strong></p>
+<pre class="properties"><code># Eureka
+eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
+eureka.instance.prefer-ip-address=true
+# eureka.instance.hostname=localhost
+
+# Actuator
+management.endpoints.web.exposure.include=*</code></pre></li>
+</ul></li>
+<li><p><strong>Final Eureka Console Snapshot</strong>: (Notice the
+Registered Instances list)</p>
+<p><img src="images/eurekaServer.png" alt="transport" style="zoom: 50%;" /></p></li>
 </ul>
+<h2 id="load-balancing">Load Balancing</h2>
         </div>
       </div>
     </div>

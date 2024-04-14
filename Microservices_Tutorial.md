@@ -669,4 +669,70 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 <img src="images/namingServer.png" alt="transport" style="zoom: 67%;" />
 
 - Also called **Service Registry**
-- 
+
+- URLs
+
+  - [Starting Project - Eureka naming Server Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=naming-server&name=naming-server&description=spring-cloud-netflix%20Eureka%20Naming%20Server%20Microservice&packageName=com.swarna.microservices.naming-server&dependencies=devtools,actuator,cloud-eureka-server)
+  - [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
+  - [Eureka Console - http://localhost:8761/](http://localhost:8761/)
+
+- **Setting up Eureka Naming Server:** 
+
+  - ***application.properties***
+
+    ```properties
+    spring.application.name=naming-server
+    server.port=8761
+    
+    # We don't want this specific server to be registered with itself
+    eureka.client.register-with-eureka=false
+    eureka.client.fetch-registry=false
+    ```
+
+  - ***NamingServerApplication.java***
+
+    ```java
+    import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+    
+    @EnableEurekaServer
+    @SpringBootApplication
+    public class NamingServerApplication {
+    
+    	public static void main(String[] args) {
+    		SpringApplication.run(NamingServerApplication.class, args);
+    	}
+    }
+    ```
+
+- **Registering other microservices with Eureka Naming Server :** 
+
+  - ***pom.xml*** - add this dependency.
+
+    ```xml
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    ```
+
+  - ***application.properties***
+
+    ```properties
+    # Eureka
+    eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
+    eureka.instance.prefer-ip-address=true
+    # eureka.instance.hostname=localhost
+    
+    # Actuator
+    management.endpoints.web.exposure.include=*
+    ```
+
+- **Final Eureka Console Snapshot**: (Notice the Registered Instances list)
+
+  <img src="images/eurekaServer.png" alt="transport" style="zoom: 50%;" />
+
+
+
+
+
+## Load Balancing
