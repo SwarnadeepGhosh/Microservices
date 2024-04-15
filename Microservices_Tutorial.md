@@ -864,8 +864,137 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
   }
   ```
 
+- **Eureka Console after turning up below 4 microservices :** 
+  - API GATEWAY on port 8765
+  - Currency Exchange on port 8000 and 8001
+  - Currency Conversion on port 8100
+
+<img src="images/gateway-setup.png" alt="transport" style="zoom: 67%;" />
+
+
+
+### Custom Routing and Custom Filter for specific API
+
+- ***ApiGatewayConfiguration.java*** - Here we only mention eureka url and we need to enable discovery locator to true, so that Spring Cloud API Gateway will automatically pickup services which are registered in Eureka Naming Server. Also we are telling api gateway to use lowercase only as service id.
+
+  ```java
+  @Configuration
+  public class ApiGatewayConfiguration {
+  
+      @Bean
+      public RouteLocator gatewayRouter(RouteLocatorBuilder builder) {
+  //       Using filters, we can add Request and Response headers and parameters to any requests or response
+          return builder.routes()
+                  .route(p -> p
+                          .path("/get") // Example
+                          .filters(f -> f
+                                  .addRequestHeader("MyHeader", "Swarna-header")
+                                  .addRequestParameter("Param", "Swarna-param"))
+                          .uri("http://httpbin.org:80"))
+                  .route(p -> p.path("/currency-exchange/**")
+                          .uri("lb://currency-exchange"))
+                  .route(p -> p.path("/currency-conversion/**")
+                          .uri("lb://currency-conversion"))
+                  .route(p -> p.path("/currency-conversion-feign/**")
+                          .uri("lb://currency-conversion"))
+                  .route(p -> p.path("/currency-conversion-new/**")
+                          .filters(f -> f.rewritePath(
+                                  "/currency-conversion-new/(?<segment>.*)",
+                                  "/currency-conversion/${segment}"))
+                          .uri("lb://currency-conversion"))
+                  .build();
+      }
+  }
+  ```
+
+- **Testing URLS :** 
+
+  - Custom Forwarding : [http://localhost:8765/currency-exchange/from/USD/to/INR](http://localhost:8765/currency-exchange/from/USD/to/INR)
+
+  - Custom Forwarding : [http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10)
+
+  - Path Rewriting : [http://localhost:8765/currency-conversion-feign/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion-feign/from/USD/to/INR/quantity/10)
+
+  - Path Rewriting : [http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10)
+
+  - Header and Parameter Injection : [http://localhost:8765/get](http://localhost:8765/get)
+
+    - Response : Original response is coming from [http://httpbin.org:80](http://httpbin.org:80), but here we are injecting ` "Param": "Swarna-param"` and `"Myheader": "Swarna-header",`
+
+      ```json
+      {
+        "args": {
+          "Param": "Swarna-param"
+        }, 
+        "headers": {
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7", 
+          "Accept-Encoding": "gzip, deflate, br, zstd", 
+          "Accept-Language": "en-US,en;q=0.9,bn;q=0.8", 
+          "Cache-Control": "max-age=0", 
+          "Content-Length": "0", 
+          "Cookie": "ext_name=ojplmecpdpgccookcobabopnaifgidhf", 
+          "Forwarded": "proto=http;host=\"localhost:8765\";for=\"[0:0:0:0:0:0:0:1]:53507\"", 
+          "Host": "httpbin.org", 
+          "Myheader": "Swarna-header", 
+          "Sec-Ch-Ua": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\"", 
+          "Sec-Ch-Ua-Mobile": "?0", 
+          "Sec-Ch-Ua-Platform": "\"Windows\"", 
+          "Sec-Fetch-Dest": "document", 
+          "Sec-Fetch-Mode": "navigate", 
+          "Sec-Fetch-Site": "none", 
+          "Sec-Fetch-User": "?1", 
+          "Upgrade-Insecure-Requests": "1", 
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36", 
+          "X-Amzn-Trace-Id": "Root=1-661d318e-4c8bb3de1028d40a6f5e07e5", 
+          "X-Forwarded-Host": "localhost:8765"
+        }, 
+        "origin": "0:0:0:0:0:0:0:1, 202.78.234.91", 
+        "url": "http://localhost:8765/get?Param=Swarna-param"
+      }
+      ```
+
+
+
+### Gateway Global Filters
+
+- ***LoggingFilter.java*** - Here we only intercepting all requests, adding a log for that and returning that same request without any modification.
+
+  ```java
+  package com.swarna.microservices.apigateway.beans;
+  
+  import org.slf4j.Logger;
+  import org.slf4j.LoggerFactory;
+  import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+  import org.springframework.cloud.gateway.filter.GlobalFilter;
+  import org.springframework.stereotype.Component;
+  import org.springframework.web.server.ServerWebExchange;
+  import reactor.core.publisher.Mono;
+  
+  @Component
+  public class LoggingFilter implements GlobalFilter {
+  
+      private final Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
+  
+      @Override
+      public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+          logger.info("Path of the request received -> {}", exchange.getRequest().getPath());
+          return chain.filter(exchange);
+      }
+  }
+  
+  /* Logs : 
+  c.s.m.apigateway.beans.LoggingFilter: Path of the request received -> /currency-conversion/from/USD/to/INR/quantity/10
+  c.s.m.apigateway.beans.LoggingFilter: Path of the request received -> /get
+  c.s.m.apigateway.beans.LoggingFilter: Path of the request received -> /currency-exchange/from/USD/to/INR
+  ```
 
 
 
 
-### Custom Routing and Custom Filters
+
+---
+
+## **Circuit Breaker- Resilience4j**
+
+
+
