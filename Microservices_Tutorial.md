@@ -664,7 +664,7 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 ---
 
-## Eureka Naming Server 
+## **Eureka Naming Server** 
 
 <img src="images/namingServer.png" alt="transport" style="zoom: 67%;" />
 
@@ -737,11 +737,11 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 ---
 
-## Load Balancing 
+## **Load Balancing with Eureka**
 
 <img src="images/LB.png" alt="transport" style="zoom: 67%;" />
 
-### Client Side Load Balancing with Feign
+
 
 - Here we will run multiple instances of **Currency Exchange** and load balance them from **Currency-Conversion** using **Feign, Eureka Naming Server and Spring Cloud Load balancer.**
 
@@ -771,6 +771,101 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 
 
+---
+
+## **Spring Cloud API Gateway**
+
+![How to Use Spring Cloud Gateway to Dynamically Discover Microservices | by  Ruby Valappil | Javarevisited | Medium](https://miro.medium.com/v2/resize:fit:1400/1*q4JzKYvQCJewGHyiMrO_og.png)
+
+- URLs
+
+  - [Starting Project - Spring Cloud API Gateway Microservice (Spring.io)](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.2.4&packaging=jar&jvmVersion=21&groupId=com.swarna.microservices&artifactId=api-gateway&name=api-gateway&description=API%20Gateway%20Microservice%20using%20Spring%20Cloud%20API%20Gateway&packageName=com.swarna.microservices.api-gateway&dependencies=devtools,actuator,cloud-eureka,cloud-gateway)
+
+  - [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
+
+  - [Eureka Console - http://localhost:8761/](http://localhost:8761/)
+
+- Simple, yet effective way to route to APIs
+
+- Provide cross cutting concerns:
+	- Security
+	- Monitoring/metrics
+	
+- Built on top of Spring WebFlux (Reactive Approach)
+
+- **Features**:
+	
+	- Match routes on any request attribute
+	- Define Predicates and Filters
+	- Integrates with Spring Cloud Discovery Client (Load Balancing) - Eureka
+	- Path Rewriting
+	
+- ***pom.xml*** - If `spring-cloud-starter-gateway-mvc` added into pom, then change it to `spring-cloud-starter-gateway`, unless you will face unnecessary errors.
+
+  ```xml
+  <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-gateway</artifactId>
+  </dependency>
+  ```
 
 
-### Spring Cloud API Gateway - Server Side LB
+
+### Auto Routing with Cloud Gateway Discovery Locator
+
+- ***application.properties*** - Here we only mention eureka url and we need to enable discovery locator to true, so that Spring Cloud API Gateway will automatically pickup services which are registered in Eureka Naming Server. Also we are telling api gateway to use lowercase only as service id.
+
+  ```properties
+  spring.application.name=api-gateway
+  server.port=8765
+  
+  eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
+  eureka.instance.prefer-ip-address=true
+  # eureka.instance.hostname=localhost
+  
+  spring.cloud.gateway.discovery.locator.enabled=true
+  spring.cloud.gateway.discovery.locator.lowerCaseServiceId=true
+  #spring.cloud.gateway.discovery.locator.lower-case-service-id=true
+  #spring.cloud.gateway.httpserver.wiretap=true
+  #spring.cloud.gateway.httpclient.wiretap=true
+  
+  # Actuator
+  management.endpoints.web.exposure.include=*
+  ```
+
+- **Testing URLS :** 
+
+  - [http://localhost:8765/currency-exchange/currency-exchange/from/USD/to/INR]( http://localhost:8765/currency-exchange/currency-exchange/from/USD/to/INR)
+  - [http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10)
+
+- **Points to Note :** if we make 2 instances up of `currency-exchange` for e.g. on port 8000 and 8001, then on hitting these gateway testing urls, will automatically load balanced. I tried with [http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10) and it sometimes returns data from port 8000 server and sometimes from port 8001 server.
+
+  ```json
+  {
+    "id": 10001,
+    "from": "USD",
+    "to": "INR",
+    "quantity": 10,
+    "conversionMultiple": 65,
+    "totalCalculatedAmount": 650,
+    "environment": "8000 feign"
+  }
+  ```
+
+  ```json
+  {
+    "id": 10001,
+    "from": "USD",
+    "to": "INR",
+    "quantity": 10,
+    "conversionMultiple": 65,
+    "totalCalculatedAmount": 650,
+    "environment": "8001 feign"
+  }
+  ```
+
+
+
+
+
+### Custom Routing and Custom Filters

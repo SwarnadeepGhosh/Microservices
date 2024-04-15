@@ -143,16 +143,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           Integration</a></li>
           </ul></li>
           <li><a href="#eureka-naming-server"
-          id="toc-eureka-naming-server">Eureka Naming Server</a></li>
-          <li><a href="#load-balancing" id="toc-load-balancing">Load
-          Balancing</a>
+          id="toc-eureka-naming-server"><strong>Eureka Naming
+          Server</strong></a></li>
+          <li><a href="#load-balancing-with-eureka"
+          id="toc-load-balancing-with-eureka"><strong>Load Balancing
+          with Eureka</strong></a></li>
+          <li><a href="#spring-cloud-api-gateway"
+          id="toc-spring-cloud-api-gateway"><strong>Spring Cloud API
+          Gateway</strong></a>
           <ul>
-          <li><a href="#client-side-load-balancing-with-feign"
-          id="toc-client-side-load-balancing-with-feign">Client Side
-          Load Balancing with Feign</a></li>
-          <li><a href="#spring-cloud-api-gateway---server-side-lb"
-          id="toc-spring-cloud-api-gateway---server-side-lb">Spring
-          Cloud API Gateway - Server Side LB</a></li>
+          <li><a
+          href="#auto-routing-with-cloud-gateway-discovery-locator"
+          id="toc-auto-routing-with-cloud-gateway-discovery-locator">Auto
+          Routing with Cloud Gateway Discovery Locator</a></li>
+          <li><a href="#custom-routing-and-custom-filters"
+          id="toc-custom-routing-and-custom-filters">Custom Routing and
+          Custom Filters</a></li>
           </ul></li>
           </ul></li>
           </ul>
@@ -898,7 +904,7 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb21-1"><a href=
 <span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 </ul>
 <hr />
-<h2 id="eureka-naming-server">Eureka Naming Server</h2>
+<h2 id="eureka-naming-server"><strong>Eureka Naming Server</strong></h2>
 <p><img src="images/namingServer.png" alt="transport" style="zoom: 67%;" /></p>
 <ul>
 <li><p>Also called <strong>Service Registry</strong></p></li>
@@ -957,10 +963,9 @@ Registered Instances list)</p>
 <p><img src="images/eurekaServer.png" alt="transport" style="zoom: 50%;" /></p></li>
 </ul>
 <hr />
-<h2 id="load-balancing">Load Balancing</h2>
+<h2 id="load-balancing-with-eureka"><strong>Load Balancing with
+Eureka</strong></h2>
 <p><img src="images/LB.png" alt="transport" style="zoom: 67%;" /></p>
-<h3 id="client-side-load-balancing-with-feign">Client Side Load
-Balancing with Feign</h3>
 <ul>
 <li><p>Here we will run multiple instances of <strong>Currency
 Exchange</strong> and load balance them from
@@ -996,8 +1001,113 @@ automatically.</strong></li>
 Feign Client.</strong></li>
 </ul>
 </blockquote>
-<h3 id="spring-cloud-api-gateway---server-side-lb">Spring Cloud API
-Gateway - Server Side LB</h3>
+<hr />
+<h2 id="spring-cloud-api-gateway"><strong>Spring Cloud API
+Gateway</strong></h2>
+<figure>
+<img
+src="https://miro.medium.com/v2/resize:fit:1400/1*q4JzKYvQCJewGHyiMrO_og.png"
+alt="How to Use Spring Cloud Gateway to Dynamically Discover Microservices | by Ruby Valappil | Javarevisited | Medium" />
+<figcaption aria-hidden="true">How to Use Spring Cloud Gateway to
+Dynamically Discover Microservices | by Ruby Valappil | Javarevisited |
+Medium</figcaption>
+</figure>
+<ul>
+<li><p>URLs</p>
+<ul>
+<li><p><a
+href="https://start.spring.io/#!type=maven-project&amp;language=java&amp;platformVersion=3.2.4&amp;packaging=jar&amp;jvmVersion=21&amp;groupId=com.swarna.microservices&amp;artifactId=api-gateway&amp;name=api-gateway&amp;description=API%20Gateway%20Microservice%20using%20Spring%20Cloud%20API%20Gateway&amp;packageName=com.swarna.microservices.api-gateway&amp;dependencies=devtools,actuator,cloud-eureka,cloud-gateway">Starting
+Project - Spring Cloud API Gateway Microservice (Spring.io)</a></p></li>
+<li><p><a href="https://github.com/SwarnadeepGhosh/Microservices">Git
+Repo Link</a></p></li>
+<li><p><a href="http://localhost:8761/">Eureka Console -
+http://localhost:8761/</a></p></li>
+</ul></li>
+<li><p>Simple, yet effective way to route to APIs</p></li>
+<li><p>Provide cross cutting concerns:</p>
+<ul>
+<li>Security</li>
+<li>Monitoring/metrics</li>
+</ul></li>
+<li><p>Built on top of Spring WebFlux (Reactive Approach)</p></li>
+<li><p><strong>Features</strong>:</p>
+<ul>
+<li>Match routes on any request attribute</li>
+<li>Define Predicates and Filters</li>
+<li>Integrates with Spring Cloud Discovery Client (Load Balancing) -
+Eureka</li>
+<li>Path Rewriting</li>
+</ul></li>
+<li><p><strong><em>pom.xml</em></strong> - If
+<code>spring-cloud-starter-gateway-mvc</code> added into pom, then
+change it to <code>spring-cloud-starter-gateway</code>, unless you will
+face unnecessary errors.</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;org.springframework.cloud&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;spring-cloud-starter-gateway&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
+</ul>
+<h3 id="auto-routing-with-cloud-gateway-discovery-locator">Auto Routing
+with Cloud Gateway Discovery Locator</h3>
+<ul>
+<li><p><strong><em>application.properties</em></strong> - Here we only
+mention eureka url and we need to enable discovery locator to true, so
+that Spring Cloud API Gateway will automatically pickup services which
+are registered in Eureka Naming Server. Also we are telling api gateway
+to use lowercase only as service id.</p>
+<pre class="properties"><code>spring.application.name=api-gateway
+server.port=8765
+
+eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
+eureka.instance.prefer-ip-address=true
+# eureka.instance.hostname=localhost
+
+spring.cloud.gateway.discovery.locator.enabled=true
+spring.cloud.gateway.discovery.locator.lowerCaseServiceId=true
+#spring.cloud.gateway.discovery.locator.lower-case-service-id=true
+#spring.cloud.gateway.httpserver.wiretap=true
+#spring.cloud.gateway.httpclient.wiretap=true
+
+# Actuator
+management.endpoints.web.exposure.include=*</code></pre></li>
+<li><p><strong>Testing URLS :</strong></p>
+<ul>
+<li><a
+href="http://localhost:8765/currency-exchange/currency-exchange/from/USD/to/INR">http://localhost:8765/currency-exchange/currency-exchange/from/USD/to/INR</a></li>
+<li><a
+href="http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10">http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10</a></li>
+</ul></li>
+<li><p><strong>Points to Note :</strong> if we make 2 instances up of
+<code>currency-exchange</code> for e.g. on port 8000 and 8001, then on
+hitting these gateway testing urls, will automatically load balanced. I
+tried with <a
+href="http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10">http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10</a>
+and it sometimes returns data from port 8000 server and sometimes from
+port 8001 server.</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10001</span><span class="fu">,</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;USD&quot;</span><span class="fu">,</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;quantity&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="dv">65</span><span class="fu">,</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;totalCalculatedAmount&quot;</span><span class="fu">:</span> <span class="dv">650</span><span class="fu">,</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;environment&quot;</span><span class="fu">:</span> <span class="st">&quot;8000 feign&quot;</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10001</span><span class="fu">,</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;USD&quot;</span><span class="fu">,</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;quantity&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="dv">65</span><span class="fu">,</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;totalCalculatedAmount&quot;</span><span class="fu">:</span> <span class="dv">650</span><span class="fu">,</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;environment&quot;</span><span class="fu">:</span> <span class="st">&quot;8001 feign&quot;</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ul>
+<h3 id="custom-routing-and-custom-filters">Custom Routing and Custom
+Filters</h3>
         </div>
       </div>
     </div>
