@@ -735,4 +735,42 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 
 
-## Load Balancing
+---
+
+## Load Balancing 
+
+<img src="images/LB.png" alt="transport" style="zoom: 67%;" />
+
+### Client Side Load Balancing with Feign
+
+- Here we will run multiple instances of **Currency Exchange** and load balance them from **Currency-Conversion** using **Feign, Eureka Naming Server and Spring Cloud Load balancer.**
+
+- Spring Cloud Load balancer comes along with Eureka Naming Server dependency.
+
+- We will remove the hardcoded url from Feign client : ***CurrencyExchangeProxy.java*** of **Currency-Conversion**
+
+  ```java
+  //@FeignClient(name = "currency-exchange", url = "${currency-exchange.url}")
+  @FeignClient(name = "currency-exchange")
+  public interface CurrencyExchangeProxy {
+  
+      @GetMapping("/currency-exchange/from/{from}/to/{to}")
+      public CurrencyConversion retrieveExchangeValue(
+              @PathVariable String from,
+              @PathVariable String to);
+  }
+  ```
+
+
+
+> - **By doing this, Feign Client will** 
+>   - **Talk to Eureka**
+>   - **Pickup the current running instances of currency-exchange**
+>   - **Do the load balancing between them automatically.**
+> - **All these magic happens just by removing hardcoded url from Feign Client.**
+
+
+
+
+
+### Spring Cloud API Gateway - Server Side LB

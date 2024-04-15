@@ -145,7 +145,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <li><a href="#eureka-naming-server"
           id="toc-eureka-naming-server">Eureka Naming Server</a></li>
           <li><a href="#load-balancing" id="toc-load-balancing">Load
-          Balancing</a></li>
+          Balancing</a>
+          <ul>
+          <li><a href="#client-side-load-balancing-with-feign"
+          id="toc-client-side-load-balancing-with-feign">Client Side
+          Load Balancing with Feign</a></li>
+          <li><a href="#spring-cloud-api-gateway---server-side-lb"
+          id="toc-spring-cloud-api-gateway---server-side-lb">Spring
+          Cloud API Gateway - Server Side LB</a></li>
+          </ul></li>
           </ul></li>
           </ul>
         </div>
@@ -948,7 +956,48 @@ management.endpoints.web.exposure.include=*</code></pre></li>
 Registered Instances list)</p>
 <p><img src="images/eurekaServer.png" alt="transport" style="zoom: 50%;" /></p></li>
 </ul>
+<hr />
 <h2 id="load-balancing">Load Balancing</h2>
+<p><img src="images/LB.png" alt="transport" style="zoom: 67%;" /></p>
+<h3 id="client-side-load-balancing-with-feign">Client Side Load
+Balancing with Feign</h3>
+<ul>
+<li><p>Here we will run multiple instances of <strong>Currency
+Exchange</strong> and load balance them from
+<strong>Currency-Conversion</strong> using <strong>Feign, Eureka Naming
+Server and Spring Cloud Load balancer.</strong></p></li>
+<li><p>Spring Cloud Load balancer comes along with Eureka Naming Server
+dependency.</p></li>
+<li><p>We will remove the hardcoded url from Feign client :
+<strong><em>CurrencyExchangeProxy.java</em></strong> of
+<strong>Currency-Conversion</strong></p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">//@FeignClient(name = &quot;currency-exchange&quot;, url = &quot;${currency-exchange.url}&quot;)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="at">@FeignClient</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;currency-exchange&quot;</span><span class="op">)</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">interface</span> CurrencyExchangeProxy <span class="op">{</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/currency-exchange/from/{from}/to/{to}&quot;</span><span class="op">)</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> CurrencyConversion <span class="fu">retrieveExchangeValue</span><span class="op">(</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> from<span class="op">,</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> to<span class="op">);</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>By doing this, Feign Client will</strong>
+<ul>
+<li><strong>Talk to Eureka</strong></li>
+<li><strong>Pickup the current running instances of
+currency-exchange</strong></li>
+<li><strong>Do the load balancing between them
+automatically.</strong></li>
+</ul></li>
+<li><strong>All these magic happens just by removing hardcoded url from
+Feign Client.</strong></li>
+</ul>
+</blockquote>
+<h3 id="spring-cloud-api-gateway---server-side-lb">Spring Cloud API
+Gateway - Server Side LB</h3>
         </div>
       </div>
     </div>
