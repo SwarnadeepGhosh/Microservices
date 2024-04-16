@@ -2,7 +2,7 @@
 
 **Tech Stack :** 
 
-<img src="https://pbs.twimg.com/profile_images/1235868806079057921/fTL08u_H_400x400.png" alt="Spring Boot (@springboot) / X" style="zoom: 40%;" /> <img src="https://static.javatpoint.com/tutorial/spring-cloud/images/spring-cloud.png" alt="Spring Cloud Tutorial - Javatpoint" style="zoom: 67%;" /> <img src="https://miro.medium.com/v2/resize:fit:486/1*mwUghPGDjdVNOe8y7Pkrpg.png" alt="Implementing Service Discovery Using Netflix Eureka | by Seonggil Jeong |  Medium" style="zoom: 50%;" /> <img src="https://camo.githubusercontent.com/c9c03fc8fd1261971c38aafd0b95f59eee0af2b435277586949579dfe8b5198d/68747470733a2f2f692e696d6775722e636f6d2f6d52536f7345702e706e67" alt="GitHub - Netflix/zuul: Zuul is a gateway service that provides dynamic  routing, monitoring, resiliency, security, and more." style="zoom: 15%;" /> <img src="https://avatars.githubusercontent.com/u/11860887?v=4" alt="GitHub - openzipkin/zipkin: Zipkin is a distributed tracing system" style="zoom:35%;" /> <img src="https://miro.medium.com/v2/resize:fit:720/1*FNJ6C1uNvCAhkJR3i7pvoQ.jpeg" alt="Hystrix + Spring Boot Implementation | by Vinesh | The Jabberjays | Medium" style="zoom: 40%;" /> <img src="https://avatars.githubusercontent.com/u/20077752?s=64&v=4" alt="OpenFeign · GitHub" style="zoom:30%;" /> <img src="https://howtodoinjava.com/wp-content/uploads/2019/12/spring-hateoas.png" alt="Spring Boot HATEOAS Links Example" style="zoom: 50%;" /> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5hPnQgYIb2fp0KenorFRSOXY268hay_nISrnJtv-6ng&s" alt="Docker full logo transparent PNG - StickPNG" style="zoom: 80%;" /> <img src="https://sue.eu/wp-content/uploads/sites/6/2022/06/kubernetes-logo-920x920-sue-v0.png" alt="Kubernetes | SUE Cloud & IT Professionals" style="zoom: 20%;" />
+<img src="https://pbs.twimg.com/profile_images/1235868806079057921/fTL08u_H_400x400.png" alt="Spring Boot (@springboot) / X" style="zoom: 33%;" /> <img src="https://static.javatpoint.com/tutorial/spring-cloud/images/spring-cloud.png" alt="Spring Cloud Tutorial - Javatpoint" style="zoom: 50%;" /> <img src="https://miro.medium.com/v2/resize:fit:486/1*mwUghPGDjdVNOe8y7Pkrpg.png" alt="Implementing Service Discovery Using Netflix Eureka | by Seonggil Jeong |  Medium" style="zoom: 33%;" />  <img src="https://content.cdntwrk.com/files/aHViPTYzOTc1JmNtZD1pdGVtZWRpdG9yaW1hZ2UmZmlsZW5hbWU9aXRlbWVkaXRvcmltYWdlXzY0MjYxYmY1NzQ0ODEucG5nJnZlcnNpb249MDAwMCZzaWc9NDBhNTg4NmQ3ZGFjMzliZmY2ZDQ3Y2JhMjU5MTlhNTA%253D" alt="Announcing Spring Cloud Gateway for Kubernetes 2.0" style="zoom: 40%;" /> <img src="https://avatars.githubusercontent.com/u/11860887?v=4" alt="GitHub - openzipkin/zipkin: Zipkin is a distributed tracing system" style="zoom:25%;" /> <img src="https://i.postimg.cc/Px3XB3VL/res.png" alt="Knoldus Blogs Java - Introduction To Resilience4j" style="zoom: 50%;" /> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5hPnQgYIb2fp0KenorFRSOXY268hay_nISrnJtv-6ng&s" alt="Docker full logo transparent PNG - StickPNG" style="zoom: 70%;" />  <img src="https://sue.eu/wp-content/uploads/sites/6/2022/06/kubernetes-logo-920x920-sue-v0.png" alt="Kubernetes | SUE Cloud & IT Professionals" style="zoom: 16%;" /> <img src="https://avatars.githubusercontent.com/u/20077752?s=64&v=4" alt="OpenFeign · GitHub" style="zoom: 25%;" /> <img src="https://howtodoinjava.com/wp-content/uploads/2019/12/spring-hateoas.png" alt="Spring Boot HATEOAS Links Example" style="zoom: 25%;" />   <img src="https://miro.medium.com/v2/resize:fit:720/1*FNJ6C1uNvCAhkJR3i7pvoQ.jpeg" alt="Hystrix + Spring Boot Implementation | by Vinesh | The Jabberjays | Medium" style="zoom: 35%;" /> <img src="https://camo.githubusercontent.com/c9c03fc8fd1261971c38aafd0b95f59eee0af2b435277586949579dfe8b5198d/68747470733a2f2f692e696d6775722e636f6d2f6d52536f7345702e706e67" alt="GitHub - Netflix/zuul: Zuul is a gateway service that provides dynamic  routing, monitoring, resiliency, security, and more." style="zoom: 12%;" />
 
 [Udemy Course Link](https://www.udemy.com/course/microservices-with-spring-boot-and-spring-cloud/?couponCode=UPGRADE02223)
 
@@ -996,5 +996,148 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 ## **Circuit Breaker- Resilience4j**
 
+![Circuit Breaker in Spring Cloud (Spring BOOT + Resilience4j)](https://techburps-7.s3.ap-south-1.amazonaws.com/tech-blog/spring-cloud-circuit-breaker-resilience4j.png)
+
+- **There are lots of microservices. What if one of the services is down or is slow?**
+  	- Impacts entire chain!
+  
+- **Questions:**
+  - Can we return a fallback response if a service is down?
+  - Can we implement a Circuit Breaker pattern to reduce load?
+  - Can we retry requests in case of temporary failures?
+  - Can we implement rate limiting?
+  
+- **Solution: Circuit Breaker Framework - <u>Resilience4j</u>**
+
+- - Dependency Setup - ***pom.xml***
+
+  ```xml
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+  </dependency>
+  <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-spring-boot2</artifactId>
+  </dependency>
+  ```
 
 
+
+**Different Patterns of Resilience4j** 
+
+- **`@Retry`** - We can use default Retry configuration (Retry attempt = 3) by adding `@Retry(name = "default")`, We can also customize retry for a specific api this way : `@Retry(name = "sample-api")`
+
+  - ***CircuitBreakerController.java*** - here we have setup custom retry by adding `@Retry(name = "sample-api"` and defined a `fallbackMethod` for the same.
+
+    ```java
+    package com.swarna.microservices.currencyexchange.beans;
+    @RestController
+    @Slf4j
+    public class CircuitBreakerController {
+    
+        @GetMapping("/sample-api")
+    //    @Retry(name = "default", fallbackMethod = "hardcodedResponse")
+        @Retry(name = "sample-api", fallbackMethod = "hardcodedResponse")
+        public String sampleApi(){
+            log.info("Sample API call received");
+            ResponseEntity<String> forEntity = new RestTemplate().getForEntity("http://dummy-url:8080", String.class);
+            return forEntity.getBody();
+        }
+    
+        public String hardcodedResponse(Exception ex) {
+            return "fallback-response";
+        }
+    }
+    ```
+
+  - ***application.properties***
+
+    ```properties
+    resilience4j.retry.instances.sample-api.maxAttempts=5 
+    resilience4j.retry.instances.sample-api.waitDuration=1s
+    resilience4j.retry.instances.sample-api.enableExponentialBackoff=true
+    ```
+
+  - Fallback method : 
+
+  
+
+- **`@CircuitBreaker`** - The **[circuit breaker pattern](https://www.baeldung.com/resilience4j#circuit-breaker) protects a downstream service** by restricting the upstream service from calling the downstream service during a partial or complete downtime.
+
+  - The CircuitBreaker is implemented via a finite state machine with three normal states: CLOSED, OPEN and HALF_OPEN and two special states DISABLED and FORCED_OPEN.
+
+    ![426](https://files.readme.io/39cdd54-state_machine.jpg)
+
+  - The CircuitBreaker uses a sliding window to store and aggregate the outcome of calls. You can choose between a count-based sliding window and a time-based sliding window. The count-based sliding window aggregrates the outcome of the last N calls. The time-based sliding window aggregrates the outcome of the calls of the last N seconds.
+
+  - ***CircuitBreakerController.java*** 
+
+    ```java
+    ...
+        @GetMapping("/sample-api")
+        //    @Retry(name = "default", fallbackMethod = "hardcodedResponse")
+        //    @Retry(name = "sample-api", fallbackMethod = "hardcodedResponse")
+        @CircuitBreaker(name = "default", fallbackMethod = "hardcodedResponse")
+        public String sampleApi(){
+        ...
+    ```
+
+  - ***application.properties***
+
+    ```properties
+    resilience4j.circuitbreaker.instances.default.failureRateThreshold=90
+    ```
+
+  
+
+- **`@RateLimiter`** - Below property means that application will only allow 2 hits for 10 second period.
+
+  - ***CircuitBreakerController.java*** 
+
+    ```java
+    ...
+        @GetMapping("/sample-api")
+        //    @Retry(name = "default", fallbackMethod = "hardcodedResponse")
+        //    @Retry(name = "sample-api", fallbackMethod = "hardcodedResponse")
+        //    @CircuitBreaker(name = "default", fallbackMethod = "hardcodedResponse")
+        @RateLimiter(name = "default")
+        public String sampleApi(){
+        ...
+    ```
+
+  - ***application.properties***
+
+    ```properties
+    resilience4j.ratelimiter.instances.default.limitForPeriod=2
+    resilience4j.ratelimiter.instances.default.limitRefreshPeriod=10s
+    ```
+
+  
+
+- **`@Bulkhead`** - How many concurrent calls are allowed. Bulkhead is one of the patterns provided by Resilience4J to prevent the cascading failure of an application by limiting the resources used by a failed component.
+
+  - In a microservices architecture, bulkheads are important to ensure that a failure in one service does not bring down the entire system. By isolating services and creating separate pools of resources, a bulkhead can prevent a failure in one service from affecting other services in the system.
+
+  - ***CircuitBreakerController.java*** 
+
+    ```java
+    ...
+        @GetMapping("/sample-api")
+        //    @Retry(name = "default", fallbackMethod = "hardcodedResponse")
+        //    @Retry(name = "sample-api", fallbackMethod = "hardcodedResponse")
+        //    @CircuitBreaker(name = "default", fallbackMethod = "hardcodedResponse")
+        //    @RateLimiter(name = "default")
+        @Bulkhead(name = "default")
+        public String sampleApi(){
+        ...
+    ```
+
+  - ***application.properties***
+
+    ```properties
+    resilience4j.bulkhead.instances.default.maxConcurrentCalls=10
+    resilience4j.bulkhead.instances.sample-api.maxConcurrentCalls=10
+    ```
+
+    
