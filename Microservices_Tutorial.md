@@ -339,9 +339,9 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 | Spring Cloud Config Server                   | http://localhost:8888/limits-service/default <br />http://localhost:8888/limits-service/dev |
 | Currency Converter Service - Direct Call     | http://localhost:8100/currency-converter/from/USD/to/INR/quantity/10 |
 | Currency Converter Service - Feign           | http://localhost:8100/currency-converter-feign/from/EUR/to/INR/quantity/10000 |
-| Currency Exchange Service                    | http://localhost:8000/currency-exchange/from/EUR/to/INR http://localhost:8001/currency-exchange/from/USD/to/INR |
+| Currency Exchange Service                    | http://localhost:8000/currency-exchange/from/EUR/to/INR <br />http://localhost:8001/currency-exchange/from/USD/to/INR |
 | Eureka                                       | http://localhost:8761/                                       |
-| Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR http://localhost:8765/currency-conversion-service/currency-converter-feign/from/USD/to/INR/quantity/10 |
+| Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR <br />http://localhost:8765/currency-conversion-service/currency-converter-feign/from/USD/to/INR/quantity/10 |
 | Zipkin                                       | http://localhost:9411/zipkin/                                |
 | Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bus-refresh (POST)            |
 
@@ -366,6 +366,40 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 
 <img src="images/dia1.png" alt="transport" style="zoom: 43%;" />
+
+
+
+### URLS
+
+```
+Currency Exchange Service
+http://localhost:8000/currency-exchange/from/USD/to/INR
+
+Currency Conversion Service
+http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10
+http://localhost:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
+
+Eureka
+http://localhost:8761/
+
+API GATEWAY
+http://localhost:8765/CURRENCY-EXCHANGE/currency-exchange/from/USD/to/INR
+http://localhost:8765/CURRENCY-CONVERSION/currency-conversion/from/USD/to/INR/quantity/10
+http://localhost:8765/CURRENCY-CONVERSION/currency-conversion-feign/from/USD/to/INR/quantity/10
+
+http://localhost:8765/currency-exchange/currency-exchange/from/USD/to/INR
+http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10
+http://localhost:8765/currency-conversion/currency-conversion-feign/from/USD/to/INR/quantity/10
+
+http://localhost:8765/currency-exchange/from/USD/to/INR
+http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10
+http://localhost:8765/currency-conversion-feign/from/USD/to/INR/quantity/10
+http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10
+```
+
+
+
+
 
 ## Currency Config Repository
 
@@ -1141,3 +1175,142 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
     ```
 
     
+
+## **Observability and OpenTelemetry**
+
+- **Monitoring** is reactive while Observability is proactive. Monitoring is a subset of Observability.
+- **Observability** - Ability of a system to measure its current state based on the generated data. How well do you understand whats happening in a system?
+  - **STEP I** : Gather data, metrics, logs, traces.
+  - **STEP II :** Get Intelligence : AI/OPS and anomaly detection.
+
+- **OpenTelemetry**: One Standard for Logs + Traces + Metrics. This is a collection of tools, APIs, SDKs to instrument, generate, collect & export telemetry data (Logs + Traces + Metrics). 
+  - **Need of OpenTelemetry** : All applications having Logs + Traces + Metrics, so **why do we need seperate standard for each one of these** ? 
+  - OpenTelemetry is a **single standard for telemetry data** (Logs + Traces + Metrics). 
+  - Cross Language
+  - Cross Platform
+- **Micrometer** (Replaces Spring Cloud Sleuth)
+  - Collect (Logs + Traces + Metrics)
+
+
+
+
+
+## **Zipkin - Distributed Tracing**
+
+URLs
+
+- [Github Reference LInk ](https://github.com/in28minutes/spring-microservices-v3/blob/main/v3-upgrade.md)
+- [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
+- [Zipkin Console - http://localhost:9411/zipkin](http://localhost:9411/zipkin)
+
+
+
+- Problems : 
+
+  - Complex call chain
+  - How do you debug problems? 
+  - How do you trace requests across microservices? 
+
+- Solution : Enter Distributed Tracing
+
+- <img src="images/distributedTracing.png" alt="transport" style="zoom: 67%;" />
+
+- Start Zipkin Server : 
+
+  ```sh
+  docker run -p 9411:9411 openzipkin/zipkin:2.23
+  
+  # Access running zipkin at http://localhost:9411/zipkin
+  ```
+
+- <img src="images/zipkin.png" alt="transport" style="zoom: 67%;" />
+
+
+
+### Connecting Zipkin with other Microservices
+
+We need to add dependencies and properties in other microservices i.e. `api-gateway`, `currency-exchange` and `currency-conversion` to connect them with Zipkin. 
+
+- <u>STEP 1:</u> ***pom.xml***,  To enable Tracing in feign, we need to add `feign-micrometer` dependency in `currency-conversion` microservice.
+
+  ```xml
+  
+          <!-- SB3 :  Micrometer > OpenTelemetry > Zipkin -->
+          <!-- Micrometer - Vendor-neutral application observability facade.
+              Instrument your JVM-based application code without vendor lock-in.
+              Observation (Metrics & Logs) + Tracing.
+          -->
+  
+          <dependency>
+              <groupId>io.micrometer</groupId>
+              <artifactId>micrometer-observation</artifactId>
+          </dependency>
+  
+          <!-- OPTION 1: Open Telemetry as Bridge (RECOMMENDED) -->
+          <!-- Open Telemetry
+              - Simplified Observability (metrics, logs, and traces) -->
+  
+          <dependency>
+              <groupId>io.micrometer</groupId>
+              <artifactId>micrometer-tracing-bridge-otel</artifactId>
+          </dependency>
+  
+          <dependency>
+              <groupId>io.opentelemetry</groupId>
+              <artifactId>opentelemetry-exporter-zipkin</artifactId>
+          </dependency>
+  
+          <!-- Enables tracing of REST API calls made using Feign - V3 ONLY-->
+          <dependency>
+              <groupId>io.github.openfeign</groupId>
+              <artifactId>feign-micrometer</artifactId>
+          </dependency>
+  ```
+
+- <u>STEP 2</u>: ***application.properties***
+
+  ```properties
+  # Zipkin
+  management.tracing.sampling.probability=1.0
+  logging.pattern.level=%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]
+  ```
+
+- <u>STEP 3: **Testing**</u> : Below url calls api-gateway, currency conversion and currency exchange:
+
+  -  [http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10)
+  - Tracing Snapshot of Zipkin : 
+  - <img src="images/zipkin2.png" alt="transport" style="zoom: 67%;" />
+
+
+
+
+
+## Docker - Container Orchestration
+
+We will come into this later
+
+
+
+
+
+
+
+---
+
+# #TODO
+
+1. We add a non runnable app ka dependency as a jar. Jo nexus pe upload Hota tha. And we just added that dependency in our pom, jo fir Nexus se download Hota tha
+
+2. What you can also check is avro schemas. Isme you don't maintain a pojo or a jar. You just maintain a avro file,  and us avso se automatically pojos ban jate hai once the build is complete.
+
+   Fayda of this is, you get backward compatibility. Ek ms ne 2 fields add kiye, ek ko chahiye ek ko nahi chahiye to it works.
+
+   Also you can maintain versions of these avros and switch seamlessly between them. And also see online ki 21 v me konse fields the and 22 me konse and so on
+
+   Basically, what if a non tech person is maintaining the pojos. He just has to mention the new field, that's it
+
+3. kafka with microservice
+
+4. redis with microservice
+
+5. Deploy docker image for free in render
