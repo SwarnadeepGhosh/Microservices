@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.swarna.microservices</groupId>
     <artifactId>naming-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>naming-server</name>
     <description>spring-cloud-netflix Eureka Naming Server Microservice</description>
     <properties>
@@ -56,6 +56,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <name>swarnadeepghosh/ms-${project.artifactId}:${project.version}</name>
+                    </image>
+                    <pullPolicy>IF_NOT_PRESENT</pullPolicy>
+                </configuration>
             </plugin>
         </plugins>
     </build>

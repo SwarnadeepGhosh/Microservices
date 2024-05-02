@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.swarna.microservices</groupId>
     <artifactId>currency-conversion</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>currency-conversion</name>
     <description>Currency Conversion Microservice</description>
     <properties>
@@ -106,6 +106,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <image>
+                        <name>swarnadeepghosh/ms-${project.artifactId}:${project.version}</name>
+                    </image>
+                    <pullPolicy>IF_NOT_PRESENT</pullPolicy>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

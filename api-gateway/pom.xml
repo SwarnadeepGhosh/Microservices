@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.swarna.microservices</groupId>
 	<artifactId>api-gateway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>api-gateway</name>
 	<description>API Gateway Microservice using Spring Cloud API Gateway</description>
 	<properties>
@@ -86,6 +86,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>swarnadeepghosh/ms-${project.artifactId}:${project.version}</name>
+					</image>
+					<pullPolicy>IF_NOT_PRESENT</pullPolicy>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

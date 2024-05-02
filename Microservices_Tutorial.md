@@ -319,32 +319,6 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
   - ***Netflix API Gateway***
 - FAULT TOLERANCE - ***Hystrix***
 
-### Standardized Ports
-
-| Application                       | Port                  |
-| --------------------------------- | --------------------- |
-| Limits Service                    | 8080, 8081, ...       |
-| Spring Cloud Config Server        | 8888                  |
-| Currency Exchange Service         | 8000, 8001, 8002, ..  |
-| Currency Conversion Service       | 8100, 8101, 8102, ... |
-| Netflix Eureka Naming Server      | 8761                  |
-| Netflix Zuul API Gateway Server   | 8765                  |
-| Zipkin Distributed Tracing Server | 9411                  |
-
-### Standardized URLs
-
-| Application                                  | URL                                                          |
-| -------------------------------------------- | ------------------------------------------------------------ |
-| Limits Service                               | http://localhost:8080/limits <br />http://localhost:8080/actuator/refresh (POST) |
-| Spring Cloud Config Server                   | http://localhost:8888/limits-service/default <br />http://localhost:8888/limits-service/dev |
-| Currency Converter Service - Direct Call     | http://localhost:8100/currency-converter/from/USD/to/INR/quantity/10 |
-| Currency Converter Service - Feign           | http://localhost:8100/currency-converter-feign/from/EUR/to/INR/quantity/10000 |
-| Currency Exchange Service                    | http://localhost:8000/currency-exchange/from/EUR/to/INR <br />http://localhost:8001/currency-exchange/from/USD/to/INR |
-| Eureka                                       | http://localhost:8761/                                       |
-| Zuul - Currency Exchange & Exchange Services | http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR <br />http://localhost:8765/currency-conversion-service/currency-converter-feign/from/USD/to/INR/quantity/10 |
-| Zipkin                                       | http://localhost:9411/zipkin/                                |
-| Spring Cloud Bus Refresh                     | http://localhost:8080/actuator/bus-refresh (POST)            |
-
 
 
 ---
@@ -369,7 +343,36 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 
 
-### URLS
+### Standardized Ports
+
+| Application                       | Port                  |
+| --------------------------------- | --------------------- |
+| Limits Service                    | 8080, 8081, ...       |
+| Spring Cloud Config Server        | 8888                  |
+| Currency Exchange Service         | 8000, 8001, 8002, ..  |
+| Currency Conversion Service       | 8100, 8101, 8102, ... |
+| Netflix Eureka Naming Server      | 8761                  |
+| Spring Cloud API Gateway          | 8765                  |
+| Zipkin Distributed Tracing Server | 9411                  |
+
+### Standardized URLs
+
+| Application                 | URL                                                          |
+| --------------------------- | ------------------------------------------------------------ |
+| Limits Service              | http://localhost:8080/limits <br />http://localhost:8080/actuator/refresh (POST) |
+| Spring Cloud Config Server  | http://localhost:8888/limits-service/default <br />http://localhost:8888/limits-service/dev |
+| Currency Exchange Service   | http://localhost:8000/currency-exchange/from/EUR/to/INR <br />http://localhost:8001/currency-exchange/from/USD/to/INR |
+| Currency Conversion Service | [http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10) |
+| Eureka Naming Server        | [Eureka Console - http://localhost:8761/](http://localhost:8761/) |
+| API Gateway                 | [http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR](http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR) <br />[http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10) |
+| Zipkin                      | [http://localhost:9411/zipkin/](http://localhost:9411/zipkin/) |
+| Spring Cloud Bus Refresh    | http://localhost:8080/actuator/bus-refresh (POST)            |
+
+
+
+
+
+**URLS**
 
 ```
 Currency Exchange Service
@@ -1174,7 +1177,10 @@ http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10
     resilience4j.bulkhead.instances.sample-api.maxConcurrentCalls=10
     ```
 
-    
+
+
+
+---
 
 ## **Observability and OpenTelemetry**
 
@@ -1193,7 +1199,7 @@ http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10
 
 
 
-
+---
 
 ## **Zipkin - Distributed Tracing**
 
@@ -1285,9 +1291,153 @@ We need to add dependencies and properties in other microservices i.e. `api-gate
 
 
 
+---
+
 ## Docker - Container Orchestration
 
-We will come into this later
+### Create Docker Image
+
+- We can use maven plugin to create docker image.
+
+- ***pom.xml*** - Need to mention image name. By default `pullPolicy` is `ALWAYS`. We are setting it to pull `IF_NOT_PRESENT`, so it will check in local first. If plugin image present in local, it will not pull.
+
+  ```xml
+  <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-maven-plugin</artifactId>
+      <configuration>
+          <image>
+              <name>swarnadeepghosh/ms-${project.artifactId}:${project.version}</name>
+          </image>
+          <pullPolicy>IF_NOT_PRESENT</pullPolicy>
+          <excludes>
+              <exclude>
+                  <groupId>org.projectlombok</groupId>
+                  <artifactId>lombok</artifactId>
+              </exclude>
+          </excludes>
+      </configuration>
+  </plugin>
+  ```
+
+- **Commands** : 
+
+  - Build Docker Image
+
+    ```sh
+    $ mvn spring-boot:build-image -DskipTests
+    
+    # 2nd approach (Need to add a Dockerfile for this to work)
+    $ docker build -t swarnadeepghosh/ms-currency-exchange:0.0.1-SNAPSHOT .
+    ```
+
+  - Run Docker image
+
+    ```sh
+    $ docker run -p 8000:8000 -d --name=currency-exchange swarnadeepghosh/ms-currency-exchange:0.0.1-SNAPSHOT
+    ```
+
+  - Push Docker Image to DockerHub
+
+    ```sh
+    $ docker push docker.io/swarnadeepghosh/ms-currency-exchange:0.0.1-SNAPSHOT
+    ```
+
+
+
+### Docker Compose
+
+We can start / stop all microservices by a single click using `docker-compose`
+
+- ***docker-compose.yml***
+
+  ```yaml
+  version: '3.7'
+  
+  services:
+  
+    currency-exchange:
+      image: swarnadeepghosh/ms-currency-exchange-service:0.0.1-SNAPSHOT
+      mem_limit: 700m
+      ports:
+        - "8000:8000"
+      networks:
+        - currency-network
+      depends_on:
+        - naming-server
+      environment:
+        EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+        MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
+  
+    currency-conversion:
+      image: swarnadeepghosh/ms-currency-conversion-service:1.0
+      mem_limit: 700m
+      ports:
+        - "8100:8100"
+      networks:
+        - currency-network
+      depends_on:
+        - naming-server
+      environment:
+        EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+        MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
+  
+    api-gateway:
+      image: swarnadeepghosh/ms-api-gateway:1.0
+      mem_limit: 700m
+      ports:
+        - "8765:8765"
+      networks:
+        - currency-network
+      depends_on:
+        - naming-server
+      environment:
+        EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+        MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
+  
+    naming-server:
+      image: swarnadeepghosh/ms-naming-server:1.0
+      mem_limit: 700m
+      ports:
+        - "8761:8761"
+      networks:
+        - currency-network
+  
+  #docker run -p 9411:9411 openzipkin/zipkin:2.23
+  
+    zipkin-server:
+      image: openzipkin/zipkin:2.23
+      mem_limit: 300m
+      ports:
+        - "9411:9411"
+      networks:
+        - currency-network
+      restart: always #Restart if there is a problem starting up
+  
+  networks:
+    currency-network:
+  ```
+
+- Commands : 
+
+  ```sh
+  # turn up server in detached mode
+  $ docker compose up -d
+  
+  # Stop and remove containers, networks
+  $ docker compose down
+  
+  # Stop services
+  $ docker compose stop
+  ```
+
+  
+
+---
+
+## Kubernetes
+
+
 
 
 
