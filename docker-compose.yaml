@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   currency-exchange:
-    image: swarnadeepghosh/ms-currency-exchange-service:0.0.1-SNAPSHOT
+    image: swarnadeepghosh/ms-currency-exchange:1.0
     mem_limit: 700m
     ports:
       - "8000:8000"
@@ -16,7 +16,7 @@ services:
       MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
 
   currency-conversion:
-    image: swarnadeepghosh/ms-currency-conversion-service:1.0
+    image: swarnadeepghosh/ms-currency-conversion:1.0
     mem_limit: 700m
     ports:
       - "8100:8100"

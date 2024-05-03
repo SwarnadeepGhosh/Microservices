@@ -115,17 +115,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           Features</a></li>
           </ul></li>
           <li><a href="#microservicesv1"
-          id="toc-microservicesv1">Microservices(V1)</a>
+          id="toc-microservicesv1">Microservices(V1)</a></li>
+          <li><a href="#microservicesv2"
+          id="toc-microservicesv2"><strong>Microservices(V2)</strong></a>
           <ul>
           <li><a href="#standardized-ports"
           id="toc-standardized-ports">Standardized Ports</a></li>
           <li><a href="#standardized-urls"
           id="toc-standardized-urls">Standardized URLs</a></li>
-          </ul></li>
-          <li><a href="#microservicesv2"
-          id="toc-microservicesv2"><strong>Microservices(V2)</strong></a>
-          <ul>
-          <li><a href="#urls" id="toc-urls">URLS</a></li>
           <li><a href="#currency-config-repository"
           id="toc-currency-config-repository">Currency Config
           Repository</a></li>
@@ -181,7 +178,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </ul></li>
           <li><a href="#docker---container-orchestration"
           id="toc-docker---container-orchestration">Docker - Container
-          Orchestration</a></li>
+          Orchestration</a>
+          <ul>
+          <li><a href="#create-docker-image"
+          id="toc-create-docker-image">Create Docker Image</a></li>
+          <li><a href="#docker-compose" id="toc-docker-compose">Docker
+          Compose</a></li>
+          </ul></li>
+          <li><a href="#kubernetes"
+          id="toc-kubernetes">Kubernetes</a></li>
           </ul></li>
           <li><a href="#todo" id="toc-todo">#TODO</a></li>
           </ul>
@@ -533,6 +538,30 @@ Config Server</em></strong></li>
 </ul></li>
 <li>FAULT TOLERANCE - <strong><em>Hystrix</em></strong></li>
 </ul>
+<hr />
+<h1 id="microservicesv2"><strong>Microservices(V2)</strong></h1>
+<p><strong>Problems and Solutions for each problem :</strong></p>
+<ul>
+<li>CENTRALIZED CONFIGURATION MANAGEMENT - <strong><em>Spring Cloud
+Config Server</em></strong></li>
+<li>LOCATION TRANSPARANCY - Naming Server
+(<strong><em>Eureka</em></strong>)</li>
+<li>LOAD BALANCING - <strong><em>Spring Cloud
+Load-balancer</em></strong> instead of <em>Ribbon</em> (Client
+Side)</li>
+<li>VISIBILITY AND MONITORING -
+<ul>
+<li><strong><em>Zipkin Distributed Tracing</em></strong></li>
+<li><strong><em>Spring Cloud Gateway</em></strong> instead of
+<em>Netflix Zuul API Gateway</em></li>
+</ul></li>
+<li>FAULT TOLERANCE - <strong><em>Resilience4j</em></strong> instead of
+<em>Hystrix</em></li>
+<li><strong>OpenTelemetry</strong> : One Standard - Logs, Traces &amp;
+Metrics</li>
+<li><strong>Micrometer</strong> (Replaces Spring Cloud Sleuth)</li>
+</ul>
+<p><img src="images/dia1.png" alt="transport" style="zoom: 43%;" /></p>
 <h3 id="standardized-ports">Standardized Ports</h3>
 <table>
 <thead>
@@ -563,7 +592,7 @@ Config Server</em></strong></li>
 <td>8761</td>
 </tr>
 <tr class="even">
-<td>Netflix Zuul API Gateway Server</td>
+<td>Spring Cloud API Gateway</td>
 <td>8765</td>
 </tr>
 <tr class="odd">
@@ -575,8 +604,8 @@ Config Server</em></strong></li>
 <h3 id="standardized-urls">Standardized URLs</h3>
 <table>
 <colgroup>
-<col style="width: 42%" />
-<col style="width: 57%" />
+<col style="width: 31%" />
+<col style="width: 68%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -587,94 +616,54 @@ Config Server</em></strong></li>
 <tbody>
 <tr class="odd">
 <td>Limits Service</td>
-<td>http://localhost:8080/limits
-<br />http://localhost:8080/actuator/refresh (POST)</td>
+<td><a
+href="http://localhost:8080/limits">http://localhost:8080/limits</a>
+<br /><a
+href="http://localhost:8080/actuator/refresh">http://localhost:8080/actuator/refresh</a>
+(POST)</td>
 </tr>
 <tr class="even">
 <td>Spring Cloud Config Server</td>
-<td>http://localhost:8888/limits-service/default
-<br />http://localhost:8888/limits-service/dev</td>
-</tr>
-<tr class="odd">
-<td>Currency Converter Service - Direct Call</td>
-<td>http://localhost:8100/currency-converter/from/USD/to/INR/quantity/10</td>
-</tr>
-<tr class="even">
-<td>Currency Converter Service - Feign</td>
-<td>http://localhost:8100/currency-converter-feign/from/EUR/to/INR/quantity/10000</td>
+<td><a
+href="http://localhost:8888/limits-service/default">http://localhost:8888/limits-service/default</a>
+<br /><a
+href="http://localhost:8888/limits-service/dev">http://localhost:8888/limits-service/dev</a></td>
 </tr>
 <tr class="odd">
 <td>Currency Exchange Service</td>
-<td>http://localhost:8000/currency-exchange/from/EUR/to/INR
-<br />http://localhost:8001/currency-exchange/from/USD/to/INR</td>
+<td><a
+href="http://localhost:8000/currency-exchange/from/EUR/to/INR">http://localhost:8000/currency-exchange/from/EUR/to/INR</a>
+<br /><a
+href="http://localhost:8000/currency-exchange/from/USD/to/INR">http://localhost:8000/currency-exchange/from/USD/to/INR</a></td>
 </tr>
 <tr class="even">
-<td>Eureka</td>
-<td>http://localhost:8761/</td>
+<td>Currency Conversion Service</td>
+<td><a
+href="http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10">http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10</a></td>
 </tr>
 <tr class="odd">
-<td>Zuul - Currency Exchange &amp; Exchange Services</td>
-<td>http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR
-<br />http://localhost:8765/currency-conversion-service/currency-converter-feign/from/USD/to/INR/quantity/10</td>
+<td>Eureka Naming Server</td>
+<td><a href="http://localhost:8761/">Eureka Console -
+http://localhost:8761/</a></td>
 </tr>
 <tr class="even">
-<td>Zipkin</td>
-<td>http://localhost:9411/zipkin/</td>
+<td>Spring Cloud API Gateway</td>
+<td><a
+href="http://localhost:8765/currency-exchange/from/USD/to/INR">http://localhost:8765/currency-exchange/from/USD/to/INR</a><br /><a
+href="http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10">http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10</a><br /><a
+href="http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10">http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10</a></td>
 </tr>
 <tr class="odd">
+<td>Zipkin Distributed Tracing</td>
+<td><a
+href="http://localhost:9411/zipkin/">http://localhost:9411/zipkin/</a></td>
+</tr>
+<tr class="even">
 <td>Spring Cloud Bus Refresh</td>
 <td>http://localhost:8080/actuator/bus-refresh (POST)</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h1 id="microservicesv2"><strong>Microservices(V2)</strong></h1>
-<p><strong>Problems and Solutions for each problem :</strong></p>
-<ul>
-<li>CENTRALIZED CONFIGURATION MANAGEMENT - <strong><em>Spring Cloud
-Config Server</em></strong></li>
-<li>LOCATION TRANSPARANCY - Naming Server
-(<strong><em>Eureka</em></strong>)</li>
-<li>LOAD BALANCING - <strong><em>Spring Cloud
-Load-balancer</em></strong> instead of <em>Ribbon</em> (Client
-Side)</li>
-<li>VISIBILITY AND MONITORING -
-<ul>
-<li><strong><em>Zipkin Distributed Tracing</em></strong></li>
-<li><strong><em>Spring Cloud Gateway</em></strong> instead of
-<em>Netflix Zuul API Gateway</em></li>
-</ul></li>
-<li>FAULT TOLERANCE - <strong><em>Resilience4j</em></strong> instead of
-<em>Hystrix</em></li>
-<li><strong>OpenTelemetry</strong> : One Standard - Logs, Traces &amp;
-Metrics</li>
-<li><strong>Micrometer</strong> (Replaces Spring Cloud Sleuth)</li>
-</ul>
-<p><img src="images/dia1.png" alt="transport" style="zoom: 43%;" /></p>
-<h3 id="urls">URLS</h3>
-<pre><code>Currency Exchange Service
-http://localhost:8000/currency-exchange/from/USD/to/INR
-
-Currency Conversion Service
-http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10
-http://localhost:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
-
-Eureka
-http://localhost:8761/
-
-API GATEWAY
-http://localhost:8765/CURRENCY-EXCHANGE/currency-exchange/from/USD/to/INR
-http://localhost:8765/CURRENCY-CONVERSION/currency-conversion/from/USD/to/INR/quantity/10
-http://localhost:8765/CURRENCY-CONVERSION/currency-conversion-feign/from/USD/to/INR/quantity/10
-
-http://localhost:8765/currency-exchange/currency-exchange/from/USD/to/INR
-http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10
-http://localhost:8765/currency-conversion/currency-conversion-feign/from/USD/to/INR/quantity/10
-
-http://localhost:8765/currency-exchange/from/USD/to/INR
-http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10
-http://localhost:8765/currency-conversion-feign/from/USD/to/INR/quantity/10
-http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10</code></pre>
 <h2 id="currency-config-repository">Currency Config Repository</h2>
 <ul>
 <li><p><a href="https://github.com/SwarnadeepGhosh/Microservices">Git
@@ -701,10 +690,10 @@ limits.service.maximum=994</code></pre></li>
 <li><p><strong>STEP 2:</strong> Initialize a git repository and push
 changes into master branch</p>
 <ul>
-<li><div class="sourceCode" id="cb11"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">$</span> git init</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">$</span> git add .</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">$</span> git commit <span class="at">-m</span> <span class="st">&quot;added files&quot;</span></span></code></pre></div></li>
+<li><div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">$</span> git init</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">$</span> git add .</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">$</span> git commit <span class="at">-m</span> <span class="st">&quot;added files&quot;</span></span></code></pre></div></li>
 <li>If its a remote branch , then we need to create api key from :
 Github &gt; Settings &gt; Developer Settings</li>
 </ul></li>
@@ -722,14 +711,14 @@ Repo Link</a></p></li>
 <li><p><strong>STEP 1</strong> : Import downloaded Zip from
 start.spring.io and add <code>@EnableConfigServer</code> annotation in
 main class : <strong><em>ConfigServerApplication.java</em></strong></p>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">config</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">EnableConfigServer</span><span class="op">;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="at">@EnableConfigServer</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="at">@SpringBootApplication</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> ConfigServerApplication <span class="op">{</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span> SpringApplication<span class="op">.</span><span class="fu">run</span><span class="op">(</span>ConfigServerApplication<span class="op">.</span><span class="fu">class</span><span class="op">,</span> args<span class="op">);</span> <span class="op">}</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">config</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">EnableConfigServer</span><span class="op">;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">@EnableConfigServer</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">@SpringBootApplication</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> ConfigServerApplication <span class="op">{</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span> SpringApplication<span class="op">.</span><span class="fu">run</span><span class="op">(</span>ConfigServerApplication<span class="op">.</span><span class="fu">class</span><span class="op">,</span> args<span class="op">);</span> <span class="op">}</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 <li><p><strong>STEP 2</strong>:
 <strong><em>application.properties</em></strong></p>
 <pre class="properties"><code>spring.application.name=config-server
@@ -778,29 +767,29 @@ spring.cloud.profiles.active=dev</code></pre></li>
 <li><p><strong>STEP 2</strong>:
 <strong><em>PropertyConfig.java</em></strong> - This will fetch data
 from property files, so that we can use it in application.</p>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="at">@ConfigurationProperties</span><span class="op">(</span><span class="st">&quot;limits.service&quot;</span><span class="op">)</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="at">@Component</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="at">@Data</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> PropertyConfig <span class="op">{</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">int</span> minimum<span class="op">;</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">int</span> maximum<span class="op">;</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="at">@ConfigurationProperties</span><span class="op">(</span><span class="st">&quot;limits.service&quot;</span><span class="op">)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="at">@Component</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="at">@Data</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> PropertyConfig <span class="op">{</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">int</span> minimum<span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">int</span> maximum<span class="op">;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 <li><p><strong>STEP 3</strong>:
 <strong><em>LimitController.java</em></strong> - This will fetch data
 from property files, so that we can use it in application.</p>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> LimitController <span class="op">{</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Autowired</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    PropertyConfig propertyConfig<span class="op">;</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/limits&quot;</span><span class="op">)</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> Limits <span class="fu">retrieveLimits</span><span class="op">(){</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">new</span> <span class="fu">Limits</span><span class="op">(</span>propertyConfig<span class="op">.</span><span class="fu">getMinimum</span><span class="op">(),</span> propertyConfig<span class="op">.</span><span class="fu">getMaximum</span><span class="op">());</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> LimitController <span class="op">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Autowired</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    PropertyConfig propertyConfig<span class="op">;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/limits&quot;</span><span class="op">)</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> Limits <span class="fu">retrieveLimits</span><span class="op">(){</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">new</span> <span class="fu">Limits</span><span class="op">(</span>propertyConfig<span class="op">.</span><span class="fu">getMinimum</span><span class="op">(),</span> propertyConfig<span class="op">.</span><span class="fu">getMaximum</span><span class="op">());</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 <li><p><strong>STEP 3</strong>: Fetch response using GET api calls : <a
 href="http://localhost:8080/limits">http://localhost:8080/limits</a> .
 Here property coming from git repo to config server and to limit
@@ -831,14 +820,14 @@ in INR, the Currency Exchange Service answers</p>
 <li>1 Australian Dollars is 50 INR.</li>
 </ul>
 <p>GET : http://localhost:8000/currency-exchange/from/EUR/to/INR</p>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode json"><code class="sourceCode json"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10002</span><span class="fu">,</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;EUR&quot;</span><span class="fu">,</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="fl">75.00</span><span class="fu">,</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;exchangeEnvironmentInfo&quot;</span><span class="fu">:</span> <span class="st">&quot;37f1ad927c6e v1 27c6e&quot;</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10002</span><span class="fu">,</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;EUR&quot;</span><span class="fu">,</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="fl">75.00</span><span class="fu">,</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;exchangeEnvironmentInfo&quot;</span><span class="fu">:</span> <span class="st">&quot;37f1ad927c6e v1 27c6e&quot;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
 </ul></li>
 <li><p><strong><em>application.properties</em></strong></p>
 <pre class="properties"><code>spring.application.name=currency-exchange
@@ -882,17 +871,17 @@ multiplies 10 by 60, and returns 600 back.</li>
 </ul>
 <p>GET :
 http://localhost:8100/currency-conversion/from/EUR/to/INR/quantity/10</p>
-<div class="sourceCode" id="cb19"><pre
-class="sourceCode json"><code class="sourceCode json"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10002</span><span class="fu">,</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;EUR&quot;</span><span class="fu">,</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="fl">75.00</span><span class="fu">,</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;quantity&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;totalCalculatedAmount&quot;</span><span class="fu">:</span> <span class="fl">750.00</span><span class="fu">,</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;exchangeEnvironmentInfo&quot;</span><span class="fu">:</span> <span class="st">&quot;37f1ad927c6e v1 27c6e&quot;</span><span class="fu">,</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionEnvironmentInfo&quot;</span><span class="fu">:</span> <span class="st">&quot;fb6316b5713d v1 5713d&quot;</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10002</span><span class="fu">,</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;EUR&quot;</span><span class="fu">,</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="fl">75.00</span><span class="fu">,</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;quantity&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;totalCalculatedAmount&quot;</span><span class="fu">:</span> <span class="fl">750.00</span><span class="fu">,</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;exchangeEnvironmentInfo&quot;</span><span class="fu">:</span> <span class="st">&quot;37f1ad927c6e v1 27c6e&quot;</span><span class="fu">,</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionEnvironmentInfo&quot;</span><span class="fu">:</span> <span class="st">&quot;fb6316b5713d v1 5713d&quot;</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
 </ul></li>
 </ul>
 <h3 id="feign-client-integration">Feign Client Integration</h3>
@@ -910,47 +899,47 @@ spring.devtools.restart.quiet-period=1s
 spring.devtools.livereload.port=35730</code></pre></li>
 <li><p>Main Interface to make Feign Client Calls :
 <strong><em>CurrencyExchangeProxy.java</em></strong></p>
-<div class="sourceCode" id="cb21"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">openfeign</span><span class="op">.</span><span class="im">FeignClient</span><span class="op">;</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">web</span><span class="op">.</span><span class="im">bind</span><span class="op">.</span><span class="im">annotation</span><span class="op">.</span><span class="im">GetMapping</span><span class="op">;</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">web</span><span class="op">.</span><span class="im">bind</span><span class="op">.</span><span class="im">annotation</span><span class="op">.</span><span class="im">PathVariable</span><span class="op">;</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="at">@FeignClient</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;currency-exchange&quot;</span><span class="op">,</span> url <span class="op">=</span> <span class="st">&quot;${currency-exchange.url}&quot;</span><span class="op">)</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">interface</span> CurrencyExchangeProxy <span class="op">{</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/currency-exchange/from/{from}/to/{to}&quot;</span><span class="op">)</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> CurrencyConversion <span class="fu">retrieveExchangeValue</span><span class="op">(</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> from<span class="op">,</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> to<span class="op">);</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">openfeign</span><span class="op">.</span><span class="im">FeignClient</span><span class="op">;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">web</span><span class="op">.</span><span class="im">bind</span><span class="op">.</span><span class="im">annotation</span><span class="op">.</span><span class="im">GetMapping</span><span class="op">;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">web</span><span class="op">.</span><span class="im">bind</span><span class="op">.</span><span class="im">annotation</span><span class="op">.</span><span class="im">PathVariable</span><span class="op">;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="at">@FeignClient</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;currency-exchange&quot;</span><span class="op">,</span> url <span class="op">=</span> <span class="st">&quot;${currency-exchange.url}&quot;</span><span class="op">)</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">interface</span> CurrencyExchangeProxy <span class="op">{</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/currency-exchange/from/{from}/to/{to}&quot;</span><span class="op">)</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> CurrencyConversion <span class="fu">retrieveExchangeValue</span><span class="op">(</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> from<span class="op">,</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> to<span class="op">);</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 <li><p><strong><em>CurrencyConversionController.java</em></strong></p>
-<div class="sourceCode" id="cb22"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> CurrencyConversionController <span class="op">{</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Autowired</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> CurrencyExchangeProxy proxy<span class="op">;</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/currency-conversion/from/{from}/to/{to}/quantity/{quantity}&quot;</span><span class="op">)</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> CurrencyConversion <span class="fu">calculateCurrencyConversionFeign</span><span class="op">(</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">@PathVariable</span> <span class="bu">String</span> from<span class="op">,</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">@PathVariable</span> <span class="bu">String</span> to<span class="op">,</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">@PathVariable</span> <span class="bu">BigDecimal</span> quantity</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span> <span class="op">{</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        CurrencyConversion currencyConversion <span class="op">=</span> proxy<span class="op">.</span><span class="fu">retrieveExchangeValue</span><span class="op">(</span>from<span class="op">,</span> to<span class="op">);</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> CurrencyConversion<span class="op">.</span><span class="fu">builder</span><span class="op">()</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">id</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getId</span><span class="op">())</span></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">from</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getFrom</span><span class="op">())</span></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">to</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getTo</span><span class="op">())</span></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">quantity</span><span class="op">(</span>quantity<span class="op">)</span></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">conversionMultiple</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getConversionMultiple</span><span class="op">())</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">totalCalculatedAmount</span><span class="op">(</span>quantity<span class="op">.</span><span class="fu">multiply</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getConversionMultiple</span><span class="op">()))</span></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">environment</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getEnvironment</span><span class="op">()</span> <span class="op">+</span> <span class="st">&quot; feign&quot;</span><span class="op">)</span></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">build</span><span class="op">();</span></span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> CurrencyConversionController <span class="op">{</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Autowired</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> CurrencyExchangeProxy proxy<span class="op">;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/currency-conversion/from/{from}/to/{to}/quantity/{quantity}&quot;</span><span class="op">)</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> CurrencyConversion <span class="fu">calculateCurrencyConversionFeign</span><span class="op">(</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">@PathVariable</span> <span class="bu">String</span> from<span class="op">,</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">@PathVariable</span> <span class="bu">String</span> to<span class="op">,</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">@PathVariable</span> <span class="bu">BigDecimal</span> quantity</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>        CurrencyConversion currencyConversion <span class="op">=</span> proxy<span class="op">.</span><span class="fu">retrieveExchangeValue</span><span class="op">(</span>from<span class="op">,</span> to<span class="op">);</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> CurrencyConversion<span class="op">.</span><span class="fu">builder</span><span class="op">()</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">id</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getId</span><span class="op">())</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">from</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getFrom</span><span class="op">())</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">to</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getTo</span><span class="op">())</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">quantity</span><span class="op">(</span>quantity<span class="op">)</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">conversionMultiple</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getConversionMultiple</span><span class="op">())</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">totalCalculatedAmount</span><span class="op">(</span>quantity<span class="op">.</span><span class="fu">multiply</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getConversionMultiple</span><span class="op">()))</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">environment</span><span class="op">(</span>currencyConversion<span class="op">.</span><span class="fu">getEnvironment</span><span class="op">()</span> <span class="op">+</span> <span class="st">&quot; feign&quot;</span><span class="op">)</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">build</span><span class="op">();</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 </ul>
 <hr />
 <h2 id="eureka-naming-server"><strong>Eureka Naming Server</strong></h2>
@@ -977,27 +966,27 @@ server.port=8761
 eureka.client.register-with-eureka=false
 eureka.client.fetch-registry=false</code></pre></li>
 <li><p><strong><em>NamingServerApplication.java</em></strong></p>
-<div class="sourceCode" id="cb24"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">netflix</span><span class="op">.</span><span class="im">eureka</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">EnableEurekaServer</span><span class="op">;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="at">@EnableEurekaServer</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="at">@SpringBootApplication</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> NamingServerApplication <span class="op">{</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        SpringApplication<span class="op">.</span><span class="fu">run</span><span class="op">(</span>NamingServerApplication<span class="op">.</span><span class="fu">class</span><span class="op">,</span> args<span class="op">);</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">netflix</span><span class="op">.</span><span class="im">eureka</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">EnableEurekaServer</span><span class="op">;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="at">@EnableEurekaServer</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="at">@SpringBootApplication</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> NamingServerApplication <span class="op">{</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>        SpringApplication<span class="op">.</span><span class="fu">run</span><span class="op">(</span>NamingServerApplication<span class="op">.</span><span class="fu">class</span><span class="op">,</span> args<span class="op">);</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 </ul></li>
 <li><p><strong>Registering other microservices with Eureka Naming Server
 :</strong></p>
 <ul>
 <li><p><strong><em>pom.xml</em></strong> - add this dependency.</p>
-<div class="sourceCode" id="cb25"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;org.springframework.cloud&lt;/<span class="kw">groupId</span>&gt;</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;spring-cloud-starter-netflix-eureka-client&lt;/<span class="kw">artifactId</span>&gt;</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;org.springframework.cloud&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;spring-cloud-starter-netflix-eureka-client&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
 <li><p><strong><em>application.properties</em></strong></p>
 <pre class="properties"><code># Eureka
 eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
@@ -1025,16 +1014,16 @@ dependency.</p></li>
 <li><p>We will remove the hardcoded url from Feign client :
 <strong><em>CurrencyExchangeProxy.java</em></strong> of
 <strong>Currency-Conversion</strong></p>
-<div class="sourceCode" id="cb27"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">//@FeignClient(name = &quot;currency-exchange&quot;, url = &quot;${currency-exchange.url}&quot;)</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="at">@FeignClient</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;currency-exchange&quot;</span><span class="op">)</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">interface</span> CurrencyExchangeProxy <span class="op">{</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/currency-exchange/from/{from}/to/{to}&quot;</span><span class="op">)</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> CurrencyConversion <span class="fu">retrieveExchangeValue</span><span class="op">(</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> from<span class="op">,</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> to<span class="op">);</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">//@FeignClient(name = &quot;currency-exchange&quot;, url = &quot;${currency-exchange.url}&quot;)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="at">@FeignClient</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;currency-exchange&quot;</span><span class="op">)</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">interface</span> CurrencyExchangeProxy <span class="op">{</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/currency-exchange/from/{from}/to/{to}&quot;</span><span class="op">)</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> CurrencyConversion <span class="fu">retrieveExchangeValue</span><span class="op">(</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> from<span class="op">,</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">@PathVariable</span> <span class="bu">String</span> to<span class="op">);</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 </ul>
 <blockquote>
 <ul>
@@ -1091,11 +1080,11 @@ Eureka</li>
 <code>spring-cloud-starter-gateway-mvc</code> added into pom, then
 change it to <code>spring-cloud-starter-gateway</code>, unless you will
 face unnecessary errors.</p>
-<div class="sourceCode" id="cb28"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;org.springframework.cloud&lt;/<span class="kw">groupId</span>&gt;</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;spring-cloud-starter-gateway&lt;/<span class="kw">artifactId</span>&gt;</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;org.springframework.cloud&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;spring-cloud-starter-gateway&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
 </ul>
 <h3 id="auto-routing-with-cloud-gateway-discovery-locator">Auto Routing
 with Cloud Gateway Discovery Locator</h3>
@@ -1134,6 +1123,16 @@ tried with <a
 href="http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10">http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10</a>
 and it sometimes returns data from port 8000 server and sometimes from
 port 8001 server.</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10001</span><span class="fu">,</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;USD&quot;</span><span class="fu">,</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;quantity&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="dv">65</span><span class="fu">,</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;totalCalculatedAmount&quot;</span><span class="fu">:</span> <span class="dv">650</span><span class="fu">,</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;environment&quot;</span><span class="fu">:</span> <span class="st">&quot;8000 feign&quot;</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb30"><pre
 class="sourceCode json"><code class="sourceCode json"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10001</span><span class="fu">,</span></span>
@@ -1142,18 +1141,8 @@ class="sourceCode json"><code class="sourceCode json"><span id="cb30-1"><a href=
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;quantity&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span></span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="dv">65</span><span class="fu">,</span></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;totalCalculatedAmount&quot;</span><span class="fu">:</span> <span class="dv">650</span><span class="fu">,</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;environment&quot;</span><span class="fu">:</span> <span class="st">&quot;8000 feign&quot;</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre
-class="sourceCode json"><code class="sourceCode json"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">10001</span><span class="fu">,</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from&quot;</span><span class="fu">:</span> <span class="st">&quot;USD&quot;</span><span class="fu">,</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to&quot;</span><span class="fu">:</span> <span class="st">&quot;INR&quot;</span><span class="fu">,</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;quantity&quot;</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">,</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;conversionMultiple&quot;</span><span class="fu">:</span> <span class="dv">65</span><span class="fu">,</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;totalCalculatedAmount&quot;</span><span class="fu">:</span> <span class="dv">650</span><span class="fu">,</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;environment&quot;</span><span class="fu">:</span> <span class="st">&quot;8001 feign&quot;</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;environment&quot;</span><span class="fu">:</span> <span class="st">&quot;8001 feign&quot;</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
 <li><p><strong>Eureka Console after turning up below 4 microservices
 :</strong></p>
 <ul>
@@ -1171,34 +1160,34 @@ only mention eureka url and we need to enable discovery locator to true,
 so that Spring Cloud API Gateway will automatically pickup services
 which are registered in Eureka Naming Server. Also we are telling api
 gateway to use lowercase only as service id.</p>
-<div class="sourceCode" id="cb32"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Configuration</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> ApiGatewayConfiguration <span class="op">{</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Bean</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> RouteLocator <span class="fu">gatewayRouter</span><span class="op">(</span>RouteLocatorBuilder builder<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co">//       Using filters, we can add Request and Response headers and parameters to any requests or response</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> builder<span class="op">.</span><span class="fu">routes</span><span class="op">()</span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/get&quot;</span><span class="op">)</span> <span class="co">// Example</span></span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">filters</span><span class="op">(</span>f <span class="op">-&gt;</span> f</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>                                <span class="op">.</span><span class="fu">addRequestHeader</span><span class="op">(</span><span class="st">&quot;MyHeader&quot;</span><span class="op">,</span> <span class="st">&quot;Swarna-header&quot;</span><span class="op">)</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>                                <span class="op">.</span><span class="fu">addRequestParameter</span><span class="op">(</span><span class="st">&quot;Param&quot;</span><span class="op">,</span> <span class="st">&quot;Swarna-param&quot;</span><span class="op">))</span></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;http://httpbin.org:80&quot;</span><span class="op">))</span></span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p<span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/currency-exchange/**&quot;</span><span class="op">)</span></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;lb://currency-exchange&quot;</span><span class="op">))</span></span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p<span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/currency-conversion/**&quot;</span><span class="op">)</span></span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;lb://currency-conversion&quot;</span><span class="op">))</span></span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p<span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/currency-conversion-feign/**&quot;</span><span class="op">)</span></span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;lb://currency-conversion&quot;</span><span class="op">))</span></span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p<span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/currency-conversion-new/**&quot;</span><span class="op">)</span></span>
-<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">filters</span><span class="op">(</span>f <span class="op">-&gt;</span> f<span class="op">.</span><span class="fu">rewritePath</span><span class="op">(</span></span>
-<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;/currency-conversion-new/(?&lt;segment&gt;.*)&quot;</span><span class="op">,</span></span>
-<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;/currency-conversion/${segment}&quot;</span><span class="op">))</span></span>
-<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;lb://currency-conversion&quot;</span><span class="op">))</span></span>
-<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">build</span><span class="op">();</span></span>
-<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Configuration</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> ApiGatewayConfiguration <span class="op">{</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Bean</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> RouteLocator <span class="fu">gatewayRouter</span><span class="op">(</span>RouteLocatorBuilder builder<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co">//       Using filters, we can add Request and Response headers and parameters to any requests or response</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> builder<span class="op">.</span><span class="fu">routes</span><span class="op">()</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/get&quot;</span><span class="op">)</span> <span class="co">// Example</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">filters</span><span class="op">(</span>f <span class="op">-&gt;</span> f</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>                                <span class="op">.</span><span class="fu">addRequestHeader</span><span class="op">(</span><span class="st">&quot;MyHeader&quot;</span><span class="op">,</span> <span class="st">&quot;Swarna-header&quot;</span><span class="op">)</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>                                <span class="op">.</span><span class="fu">addRequestParameter</span><span class="op">(</span><span class="st">&quot;Param&quot;</span><span class="op">,</span> <span class="st">&quot;Swarna-param&quot;</span><span class="op">))</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;http://httpbin.org:80&quot;</span><span class="op">))</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p<span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/currency-exchange/**&quot;</span><span class="op">)</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;lb://currency-exchange&quot;</span><span class="op">))</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p<span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/currency-conversion/**&quot;</span><span class="op">)</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;lb://currency-conversion&quot;</span><span class="op">))</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p<span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/currency-conversion-feign/**&quot;</span><span class="op">)</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;lb://currency-conversion&quot;</span><span class="op">))</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">route</span><span class="op">(</span>p <span class="op">-&gt;</span> p<span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/currency-conversion-new/**&quot;</span><span class="op">)</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">filters</span><span class="op">(</span>f <span class="op">-&gt;</span> f<span class="op">.</span><span class="fu">rewritePath</span><span class="op">(</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;/currency-conversion-new/(?&lt;segment&gt;.*)&quot;</span><span class="op">,</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;/currency-conversion/${segment}&quot;</span><span class="op">))</span></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;lb://currency-conversion&quot;</span><span class="op">))</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">build</span><span class="op">();</span></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 <li><p><strong>Testing URLS :</strong></p>
 <ul>
 <li><p>Custom Forwarding : <a
@@ -1216,36 +1205,36 @@ href="http://localhost:8765/get">http://localhost:8765/get</a></p>
 href="http://httpbin.org:80">http://httpbin.org:80</a>, but here we are
 injecting <code>"Param": "Swarna-param"</code> and
 <code>"Myheader": "Swarna-header",</code></p>
-<div class="sourceCode" id="cb33"><pre
-class="sourceCode json"><code class="sourceCode json"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Param&quot;</span><span class="fu">:</span> <span class="st">&quot;Swarna-param&quot;</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span> </span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;headers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Accept&quot;</span><span class="fu">:</span> <span class="st">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Accept-Encoding&quot;</span><span class="fu">:</span> <span class="st">&quot;gzip, deflate, br, zstd&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Accept-Language&quot;</span><span class="fu">:</span> <span class="st">&quot;en-US,en;q=0.9,bn;q=0.8&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Cache-Control&quot;</span><span class="fu">:</span> <span class="st">&quot;max-age=0&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Content-Length&quot;</span><span class="fu">:</span> <span class="st">&quot;0&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Cookie&quot;</span><span class="fu">:</span> <span class="st">&quot;ext_name=ojplmecpdpgccookcobabopnaifgidhf&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Forwarded&quot;</span><span class="fu">:</span> <span class="st">&quot;proto=http;host=</span><span class="ch">\&quot;</span><span class="st">localhost:8765</span><span class="ch">\&quot;</span><span class="st">;for=</span><span class="ch">\&quot;</span><span class="st">[0:0:0:0:0:0:0:1]:53507</span><span class="ch">\&quot;</span><span class="st">&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Host&quot;</span><span class="fu">:</span> <span class="st">&quot;httpbin.org&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Myheader&quot;</span><span class="fu">:</span> <span class="st">&quot;Swarna-header&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Ch-Ua&quot;</span><span class="fu">:</span> <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">Google Chrome</span><span class="ch">\&quot;</span><span class="st">;v=</span><span class="ch">\&quot;</span><span class="st">123</span><span class="ch">\&quot;</span><span class="st">, </span><span class="ch">\&quot;</span><span class="st">Not:A-Brand</span><span class="ch">\&quot;</span><span class="st">;v=</span><span class="ch">\&quot;</span><span class="st">8</span><span class="ch">\&quot;</span><span class="st">, </span><span class="ch">\&quot;</span><span class="st">Chromium</span><span class="ch">\&quot;</span><span class="st">;v=</span><span class="ch">\&quot;</span><span class="st">123</span><span class="ch">\&quot;</span><span class="st">&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Ch-Ua-Mobile&quot;</span><span class="fu">:</span> <span class="st">&quot;?0&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Ch-Ua-Platform&quot;</span><span class="fu">:</span> <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">Windows</span><span class="ch">\&quot;</span><span class="st">&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Fetch-Dest&quot;</span><span class="fu">:</span> <span class="st">&quot;document&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Fetch-Mode&quot;</span><span class="fu">:</span> <span class="st">&quot;navigate&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Fetch-Site&quot;</span><span class="fu">:</span> <span class="st">&quot;none&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Fetch-User&quot;</span><span class="fu">:</span> <span class="st">&quot;?1&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Upgrade-Insecure-Requests&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;User-Agent&quot;</span><span class="fu">:</span> <span class="st">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;X-Amzn-Trace-Id&quot;</span><span class="fu">:</span> <span class="st">&quot;Root=1-661d318e-4c8bb3de1028d40a6f5e07e5&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;X-Forwarded-Host&quot;</span><span class="fu">:</span> <span class="st">&quot;localhost:8765&quot;</span></span>
-<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span> </span>
-<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;origin&quot;</span><span class="fu">:</span> <span class="st">&quot;0:0:0:0:0:0:0:1, 202.78.234.91&quot;</span><span class="fu">,</span> </span>
-<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;url&quot;</span><span class="fu">:</span> <span class="st">&quot;http://localhost:8765/get?Param=Swarna-param&quot;</span></span>
-<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Param&quot;</span><span class="fu">:</span> <span class="st">&quot;Swarna-param&quot;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span> </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;headers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Accept&quot;</span><span class="fu">:</span> <span class="st">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Accept-Encoding&quot;</span><span class="fu">:</span> <span class="st">&quot;gzip, deflate, br, zstd&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Accept-Language&quot;</span><span class="fu">:</span> <span class="st">&quot;en-US,en;q=0.9,bn;q=0.8&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Cache-Control&quot;</span><span class="fu">:</span> <span class="st">&quot;max-age=0&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Content-Length&quot;</span><span class="fu">:</span> <span class="st">&quot;0&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Cookie&quot;</span><span class="fu">:</span> <span class="st">&quot;ext_name=ojplmecpdpgccookcobabopnaifgidhf&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Forwarded&quot;</span><span class="fu">:</span> <span class="st">&quot;proto=http;host=</span><span class="ch">\&quot;</span><span class="st">localhost:8765</span><span class="ch">\&quot;</span><span class="st">;for=</span><span class="ch">\&quot;</span><span class="st">[0:0:0:0:0:0:0:1]:53507</span><span class="ch">\&quot;</span><span class="st">&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Host&quot;</span><span class="fu">:</span> <span class="st">&quot;httpbin.org&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Myheader&quot;</span><span class="fu">:</span> <span class="st">&quot;Swarna-header&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Ch-Ua&quot;</span><span class="fu">:</span> <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">Google Chrome</span><span class="ch">\&quot;</span><span class="st">;v=</span><span class="ch">\&quot;</span><span class="st">123</span><span class="ch">\&quot;</span><span class="st">, </span><span class="ch">\&quot;</span><span class="st">Not:A-Brand</span><span class="ch">\&quot;</span><span class="st">;v=</span><span class="ch">\&quot;</span><span class="st">8</span><span class="ch">\&quot;</span><span class="st">, </span><span class="ch">\&quot;</span><span class="st">Chromium</span><span class="ch">\&quot;</span><span class="st">;v=</span><span class="ch">\&quot;</span><span class="st">123</span><span class="ch">\&quot;</span><span class="st">&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Ch-Ua-Mobile&quot;</span><span class="fu">:</span> <span class="st">&quot;?0&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Ch-Ua-Platform&quot;</span><span class="fu">:</span> <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">Windows</span><span class="ch">\&quot;</span><span class="st">&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Fetch-Dest&quot;</span><span class="fu">:</span> <span class="st">&quot;document&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Fetch-Mode&quot;</span><span class="fu">:</span> <span class="st">&quot;navigate&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Fetch-Site&quot;</span><span class="fu">:</span> <span class="st">&quot;none&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Sec-Fetch-User&quot;</span><span class="fu">:</span> <span class="st">&quot;?1&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Upgrade-Insecure-Requests&quot;</span><span class="fu">:</span> <span class="st">&quot;1&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;User-Agent&quot;</span><span class="fu">:</span> <span class="st">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;X-Amzn-Trace-Id&quot;</span><span class="fu">:</span> <span class="st">&quot;Root=1-661d318e-4c8bb3de1028d40a6f5e07e5&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;X-Forwarded-Host&quot;</span><span class="fu">:</span> <span class="st">&quot;localhost:8765&quot;</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span> </span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;origin&quot;</span><span class="fu">:</span> <span class="st">&quot;0:0:0:0:0:0:0:1, 202.78.234.91&quot;</span><span class="fu">,</span> </span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;url&quot;</span><span class="fu">:</span> <span class="st">&quot;http://localhost:8765/get?Param=Swarna-param&quot;</span></span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1254,33 +1243,33 @@ class="sourceCode json"><code class="sourceCode json"><span id="cb33-1"><a href=
 <li><p><strong><em>LoggingFilter.java</em></strong> - Here we only
 intercepting all requests, adding a log for that and returning that same
 request without any modification.</p>
-<div class="sourceCode" id="cb34"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">swarna</span><span class="op">.</span><span class="im">microservices</span><span class="op">.</span><span class="im">apigateway</span><span class="op">.</span><span class="im">beans</span><span class="op">;</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">slf4j</span><span class="op">.</span><span class="im">Logger</span><span class="op">;</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">slf4j</span><span class="op">.</span><span class="im">LoggerFactory</span><span class="op">;</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">gateway</span><span class="op">.</span><span class="im">filter</span><span class="op">.</span><span class="im">GatewayFilterChain</span><span class="op">;</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">gateway</span><span class="op">.</span><span class="im">filter</span><span class="op">.</span><span class="im">GlobalFilter</span><span class="op">;</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">stereotype</span><span class="op">.</span><span class="im">Component</span><span class="op">;</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">web</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">ServerWebExchange</span><span class="op">;</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">reactor</span><span class="op">.</span><span class="im">core</span><span class="op">.</span><span class="im">publisher</span><span class="op">.</span><span class="im">Mono</span><span class="op">;</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="at">@Component</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> LoggingFilter <span class="kw">implements</span> GlobalFilter <span class="op">{</span></span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">final</span> <span class="bu">Logger</span> logger <span class="op">=</span> LoggerFactory<span class="op">.</span><span class="fu">getLogger</span><span class="op">(</span>LoggingFilter<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Override</span></span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> Mono<span class="op">&lt;</span><span class="bu">Void</span><span class="op">&gt;</span> <span class="fu">filter</span><span class="op">(</span>ServerWebExchange exchange<span class="op">,</span> GatewayFilterChain chain<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>        logger<span class="op">.</span><span class="fu">info</span><span class="op">(</span><span class="st">&quot;Path of the request received -&gt; {}&quot;</span><span class="op">,</span> exchange<span class="op">.</span><span class="fu">getRequest</span><span class="op">().</span><span class="fu">getPath</span><span class="op">());</span></span>
-<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> chain<span class="op">.</span><span class="fu">filter</span><span class="op">(</span>exchange<span class="op">);</span></span>
-<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="co">/* Logs : </span></span>
-<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a><span class="co">c.s.m.apigateway.beans.LoggingFilter: Path of the request received -&gt; /currency-conversion/from/USD/to/INR/quantity/10</span></span>
-<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a><span class="co">c.s.m.apigateway.beans.LoggingFilter: Path of the request received -&gt; /get</span></span>
-<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a><span class="co">c.s.m.apigateway.beans.LoggingFilter: Path of the request received -&gt; /currency-exchange/from/USD/to/INR</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">swarna</span><span class="op">.</span><span class="im">microservices</span><span class="op">.</span><span class="im">apigateway</span><span class="op">.</span><span class="im">beans</span><span class="op">;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">slf4j</span><span class="op">.</span><span class="im">Logger</span><span class="op">;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">slf4j</span><span class="op">.</span><span class="im">LoggerFactory</span><span class="op">;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">gateway</span><span class="op">.</span><span class="im">filter</span><span class="op">.</span><span class="im">GatewayFilterChain</span><span class="op">;</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">cloud</span><span class="op">.</span><span class="im">gateway</span><span class="op">.</span><span class="im">filter</span><span class="op">.</span><span class="im">GlobalFilter</span><span class="op">;</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">stereotype</span><span class="op">.</span><span class="im">Component</span><span class="op">;</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">web</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">ServerWebExchange</span><span class="op">;</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">reactor</span><span class="op">.</span><span class="im">core</span><span class="op">.</span><span class="im">publisher</span><span class="op">.</span><span class="im">Mono</span><span class="op">;</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="at">@Component</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> LoggingFilter <span class="kw">implements</span> GlobalFilter <span class="op">{</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="dt">final</span> <span class="bu">Logger</span> logger <span class="op">=</span> LoggerFactory<span class="op">.</span><span class="fu">getLogger</span><span class="op">(</span>LoggingFilter<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Override</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> Mono<span class="op">&lt;</span><span class="bu">Void</span><span class="op">&gt;</span> <span class="fu">filter</span><span class="op">(</span>ServerWebExchange exchange<span class="op">,</span> GatewayFilterChain chain<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>        logger<span class="op">.</span><span class="fu">info</span><span class="op">(</span><span class="st">&quot;Path of the request received -&gt; {}&quot;</span><span class="op">,</span> exchange<span class="op">.</span><span class="fu">getRequest</span><span class="op">().</span><span class="fu">getPath</span><span class="op">());</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> chain<span class="op">.</span><span class="fu">filter</span><span class="op">(</span>exchange<span class="op">);</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="co">/* Logs : </span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="co">c.s.m.apigateway.beans.LoggingFilter: Path of the request received -&gt; /currency-conversion/from/USD/to/INR/quantity/10</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a><span class="co">c.s.m.apigateway.beans.LoggingFilter: Path of the request received -&gt; /get</span></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a><span class="co">c.s.m.apigateway.beans.LoggingFilter: Path of the request received -&gt; /currency-exchange/from/USD/to/INR</span></span></code></pre></div></li>
 </ul>
 <hr />
 <h2 id="circuit-breaker--resilience4j"><strong>Circuit Breaker-
@@ -1310,15 +1299,15 @@ services is down or is slow?</strong></p>
 <li><ul>
 <li>Dependency Setup - <strong><em>pom.xml</em></strong></li>
 </ul>
-<div class="sourceCode" id="cb35"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;org.springframework.boot&lt;/<span class="kw">groupId</span>&gt;</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;spring-boot-starter-aop&lt;/<span class="kw">artifactId</span>&gt;</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;io.github.resilience4j&lt;/<span class="kw">groupId</span>&gt;</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;resilience4j-spring-boot2&lt;/<span class="kw">artifactId</span>&gt;</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;org.springframework.boot&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;spring-boot-starter-aop&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;io.github.resilience4j&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;resilience4j-spring-boot2&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
 </ul>
 <p><strong>Different Patterns of Resilience4j</strong></p>
 <ul>
@@ -1331,25 +1320,25 @@ specific api this way : <code>@Retry(name = "sample-api")</code></p>
 have setup custom retry by adding
 <code>@Retry(name = "sample-api"</code> and defined a
 <code>fallbackMethod</code> for the same.</p>
-<div class="sourceCode" id="cb36"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">swarna</span><span class="op">.</span><span class="im">microservices</span><span class="op">.</span><span class="im">currencyexchange</span><span class="op">.</span><span class="im">beans</span><span class="op">;</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="at">@Slf4j</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> CircuitBreakerController <span class="op">{</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/sample-api&quot;</span><span class="op">)</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co">//    @Retry(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Retry</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;sample-api&quot;</span><span class="op">,</span> fallbackMethod <span class="op">=</span> <span class="st">&quot;hardcodedResponse&quot;</span><span class="op">)</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">sampleApi</span><span class="op">(){</span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>        log<span class="op">.</span><span class="fu">info</span><span class="op">(</span><span class="st">&quot;Sample API call received&quot;</span><span class="op">);</span></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>        ResponseEntity<span class="op">&lt;</span><span class="bu">String</span><span class="op">&gt;</span> forEntity <span class="op">=</span> <span class="kw">new</span> <span class="fu">RestTemplate</span><span class="op">().</span><span class="fu">getForEntity</span><span class="op">(</span><span class="st">&quot;http://dummy-url:8080&quot;</span><span class="op">,</span> <span class="bu">String</span><span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> forEntity<span class="op">.</span><span class="fu">getBody</span><span class="op">();</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">hardcodedResponse</span><span class="op">(</span><span class="bu">Exception</span> ex<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;fallback-response&quot;</span><span class="op">;</span></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span><span class="im"> com</span><span class="op">.</span><span class="im">swarna</span><span class="op">.</span><span class="im">microservices</span><span class="op">.</span><span class="im">currencyexchange</span><span class="op">.</span><span class="im">beans</span><span class="op">;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="at">@Slf4j</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> CircuitBreakerController <span class="op">{</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/sample-api&quot;</span><span class="op">)</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co">//    @Retry(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Retry</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;sample-api&quot;</span><span class="op">,</span> fallbackMethod <span class="op">=</span> <span class="st">&quot;hardcodedResponse&quot;</span><span class="op">)</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">sampleApi</span><span class="op">(){</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>        log<span class="op">.</span><span class="fu">info</span><span class="op">(</span><span class="st">&quot;Sample API call received&quot;</span><span class="op">);</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>        ResponseEntity<span class="op">&lt;</span><span class="bu">String</span><span class="op">&gt;</span> forEntity <span class="op">=</span> <span class="kw">new</span> <span class="fu">RestTemplate</span><span class="op">().</span><span class="fu">getForEntity</span><span class="op">(</span><span class="st">&quot;http://dummy-url:8080&quot;</span><span class="op">,</span> <span class="bu">String</span><span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> forEntity<span class="op">.</span><span class="fu">getBody</span><span class="op">();</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">hardcodedResponse</span><span class="op">(</span><span class="bu">Exception</span> ex<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;fallback-response&quot;</span><span class="op">;</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
 <li><p><strong><em>application.properties</em></strong></p>
 <pre class="properties"><code>resilience4j.retry.instances.sample-api.maxAttempts=5 
 resilience4j.retry.instances.sample-api.waitDuration=1s
@@ -1377,14 +1366,14 @@ aggregrates the outcome of the last N calls. The time-based sliding
 window aggregrates the outcome of the calls of the last N
 seconds.</p></li>
 <li><p><strong><em>CircuitBreakerController.java</em></strong></p>
-<div class="sourceCode" id="cb38"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/sample-api&quot;</span><span class="op">)</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;sample-api&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">@CircuitBreaker</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;default&quot;</span><span class="op">,</span> fallbackMethod <span class="op">=</span> <span class="st">&quot;hardcodedResponse&quot;</span><span class="op">)</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">sampleApi</span><span class="op">(){</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">...</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/sample-api&quot;</span><span class="op">)</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;sample-api&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">@CircuitBreaker</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;default&quot;</span><span class="op">,</span> fallbackMethod <span class="op">=</span> <span class="st">&quot;hardcodedResponse&quot;</span><span class="op">)</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">sampleApi</span><span class="op">(){</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">...</span></span></code></pre></div></li>
 <li><p><strong><em>application.properties</em></strong></p>
 <pre class="properties"><code>resilience4j.circuitbreaker.instances.default.failureRateThreshold=90</code></pre></li>
 </ul></li>
@@ -1392,15 +1381,15 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb38-1"><a href=
 that application will only allow 2 hits for 10 second period.</p>
 <ul>
 <li><p><strong><em>CircuitBreakerController.java</em></strong></p>
-<div class="sourceCode" id="cb40"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/sample-api&quot;</span><span class="op">)</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;sample-api&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @CircuitBreaker(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">@RateLimiter</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;default&quot;</span><span class="op">)</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">sampleApi</span><span class="op">(){</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">...</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/sample-api&quot;</span><span class="op">)</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;sample-api&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @CircuitBreaker(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">@RateLimiter</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;default&quot;</span><span class="op">)</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">sampleApi</span><span class="op">(){</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">...</span></span></code></pre></div></li>
 <li><p><strong><em>application.properties</em></strong></p>
 <pre class="properties"><code>resilience4j.ratelimiter.instances.default.limitForPeriod=2
 resilience4j.ratelimiter.instances.default.limitRefreshPeriod=10s</code></pre></li>
@@ -1416,21 +1405,22 @@ system. By isolating services and creating separate pools of resources,
 a bulkhead can prevent a failure in one service from affecting other
 services in the system.</p></li>
 <li><p><strong><em>CircuitBreakerController.java</em></strong></p>
-<div class="sourceCode" id="cb42"><pre
-class="sourceCode java"><code class="sourceCode java"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/sample-api&quot;</span><span class="op">)</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;sample-api&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @CircuitBreaker(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @RateLimiter(name = &quot;default&quot;)</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Bulkhead</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;default&quot;</span><span class="op">)</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">sampleApi</span><span class="op">(){</span></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">...</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/sample-api&quot;</span><span class="op">)</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @Retry(name = &quot;sample-api&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @CircuitBreaker(name = &quot;default&quot;, fallbackMethod = &quot;hardcodedResponse&quot;)</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">//    @RateLimiter(name = &quot;default&quot;)</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">@Bulkhead</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;default&quot;</span><span class="op">)</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">sampleApi</span><span class="op">(){</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">...</span></span></code></pre></div></li>
 <li><p><strong><em>application.properties</em></strong></p>
 <pre class="properties"><code>resilience4j.bulkhead.instances.default.maxConcurrentCalls=10
 resilience4j.bulkhead.instances.sample-api.maxConcurrentCalls=10</code></pre></li>
 </ul></li>
 </ul>
+<hr />
 <h2 id="observability-and-opentelemetry"><strong>Observability and
 OpenTelemetry</strong></h2>
 <ul>
@@ -1461,6 +1451,7 @@ data</strong> (Logs + Traces + Metrics).</li>
 <li>Collect (Logs + Traces + Metrics)</li>
 </ul></li>
 </ul>
+<hr />
 <h2 id="zipkin---distributed-tracing"><strong>Zipkin - Distributed
 Tracing</strong></h2>
 <p>URLs</p>
@@ -1481,10 +1472,10 @@ http://localhost:9411/zipkin</a></p></li>
 <li><p>Solution : Enter Distributed Tracing</p></li>
 <li><p><img src="images/distributedTracing.png" alt="transport" style="zoom: 67%;" /></p></li>
 <li><p>Start Zipkin Server :</p>
-<div class="sourceCode" id="cb44"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 9411:9411 openzipkin/zipkin:2.23</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Access running zipkin at http://localhost:9411/zipkin</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 9411:9411 openzipkin/zipkin:2.23</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Access running zipkin at http://localhost:9411/zipkin</span></span></code></pre></div></li>
 <li><p><img src="images/zipkin.png" alt="transport" style="zoom: 67%;" /></p></li>
 </ul>
 <h3 id="connecting-zipkin-with-other-microservices">Connecting Zipkin
@@ -1496,38 +1487,38 @@ i.e. <code>api-gateway</code>, <code>currency-exchange</code> and
 <li><p><u>STEP 1:</u> <strong><em>pom.xml</em></strong>, To enable
 Tracing in feign, we need to add <code>feign-micrometer</code>
 dependency in <code>currency-conversion</code> microservice.</p>
-<div class="sourceCode" id="cb45"><pre
-class="sourceCode xml"><code class="sourceCode xml"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- SB3 :  Micrometer &gt; OpenTelemetry &gt; Zipkin --&gt;</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- Micrometer - Vendor-neutral application observability facade.</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">            Instrument your JVM-based application code without vendor lock-in.</span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">            Observation (Metrics &amp; Logs) + Tracing.</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="co">        --&gt;</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">dependency</span>&gt;</span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">groupId</span>&gt;io.micrometer&lt;/<span class="kw">groupId</span>&gt;</span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">artifactId</span>&gt;micrometer-observation&lt;/<span class="kw">artifactId</span>&gt;</span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">dependency</span>&gt;</span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- OPTION 1: Open Telemetry as Bridge (RECOMMENDED) --&gt;</span></span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- Open Telemetry</span></span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a><span class="co">            - Simplified Observability (metrics, logs, and traces) --&gt;</span></span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">dependency</span>&gt;</span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">groupId</span>&gt;io.micrometer&lt;/<span class="kw">groupId</span>&gt;</span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">artifactId</span>&gt;micrometer-tracing-bridge-otel&lt;/<span class="kw">artifactId</span>&gt;</span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">dependency</span>&gt;</span>
-<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">dependency</span>&gt;</span>
-<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">groupId</span>&gt;io.opentelemetry&lt;/<span class="kw">groupId</span>&gt;</span>
-<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">artifactId</span>&gt;opentelemetry-exporter-zipkin&lt;/<span class="kw">artifactId</span>&gt;</span>
-<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">dependency</span>&gt;</span>
-<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- Enables tracing of REST API calls made using Feign - V3 ONLY--&gt;</span></span>
-<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">dependency</span>&gt;</span>
-<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">groupId</span>&gt;io.github.openfeign&lt;/<span class="kw">groupId</span>&gt;</span>
-<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">artifactId</span>&gt;feign-micrometer&lt;/<span class="kw">artifactId</span>&gt;</span>
-<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- SB3 :  Micrometer &gt; OpenTelemetry &gt; Zipkin --&gt;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- Micrometer - Vendor-neutral application observability facade.</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co">            Instrument your JVM-based application code without vendor lock-in.</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co">            Observation (Metrics &amp; Logs) + Tracing.</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co">        --&gt;</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">groupId</span>&gt;io.micrometer&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">artifactId</span>&gt;micrometer-observation&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">dependency</span>&gt;</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- OPTION 1: Open Telemetry as Bridge (RECOMMENDED) --&gt;</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- Open Telemetry</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="co">            - Simplified Observability (metrics, logs, and traces) --&gt;</span></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">groupId</span>&gt;io.micrometer&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">artifactId</span>&gt;micrometer-tracing-bridge-otel&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">dependency</span>&gt;</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">groupId</span>&gt;io.opentelemetry&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">artifactId</span>&gt;opentelemetry-exporter-zipkin&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">dependency</span>&gt;</span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>        <span class="co">&lt;!-- Enables tracing of REST API calls made using Feign - V3 ONLY--&gt;</span></span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">dependency</span>&gt;</span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">groupId</span>&gt;io.github.openfeign&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">artifactId</span>&gt;feign-micrometer&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">dependency</span>&gt;</span></code></pre></div></li>
 <li><p><u>STEP 2</u>:
 <strong><em>application.properties</em></strong></p>
 <pre class="properties"><code># Zipkin
@@ -1542,9 +1533,135 @@ href="http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10">htt
 <li><img src="images/zipkin2.png" alt="transport" style="zoom: 67%;" /></li>
 </ul></li>
 </ul>
+<hr />
 <h2 id="docker---container-orchestration">Docker - Container
 Orchestration</h2>
-<p>We will come into this later</p>
+<h3 id="create-docker-image">Create Docker Image</h3>
+<ul>
+<li><p>We can use maven plugin to create docker image.</p></li>
+<li><p><strong><em>pom.xml</em></strong> - Need to mention image name.
+By default <code>pullPolicy</code> is <code>ALWAYS</code>. We are
+setting it to pull <code>IF_NOT_PRESENT</code>, so it will check in
+local first. If plugin image present in local, it will not pull.</p>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">plugin</span>&gt;</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">groupId</span>&gt;org.springframework.boot&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">artifactId</span>&gt;spring-boot-maven-plugin&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">configuration</span>&gt;</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">image</span>&gt;</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">name</span>&gt;swarnadeepghosh/ms-${project.artifactId}:${project.version}&lt;/<span class="kw">name</span>&gt;</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">image</span>&gt;</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">pullPolicy</span>&gt;IF_NOT_PRESENT&lt;/<span class="kw">pullPolicy</span>&gt;</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">excludes</span>&gt;</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">exclude</span>&gt;</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">groupId</span>&gt;org.projectlombok&lt;/<span class="kw">groupId</span>&gt;</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">artifactId</span>&gt;lombok&lt;/<span class="kw">artifactId</span>&gt;</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>            &lt;/<span class="kw">exclude</span>&gt;</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">excludes</span>&gt;</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">configuration</span>&gt;</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">plugin</span>&gt;</span></code></pre></div></li>
+<li><p><strong>Commands</strong> :</p>
+<ul>
+<li><p>Build Docker Image</p>
+<div class="sourceCode" id="cb47"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mvn spring-boot:build-image <span class="at">-DskipTests</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 2nd approach (Need to add a Dockerfile for this to work)</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker build <span class="at">-t</span> swarnadeepghosh/ms-currency-exchange:0.0.1-SNAPSHOT .</span></code></pre></div></li>
+<li><p>Run Docker image</p>
+<div class="sourceCode" id="cb48"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">-p</span> 8000:8000 <span class="at">-d</span> <span class="at">--name</span><span class="op">=</span>currency-exchange swarnadeepghosh/ms-currency-exchange:0.0.1-SNAPSHOT</span></code></pre></div></li>
+<li><p>Push Docker Image to DockerHub</p>
+<div class="sourceCode" id="cb49"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker push docker.io/swarnadeepghosh/ms-currency-exchange:0.0.1-SNAPSHOT</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker push docker.io/swarnadeepghosh/ms-currency-conversion:1.0</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker push docker.io/swarnadeepghosh/ms-api-gateway:1.0</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker push docker.io/swarnadeepghosh/ms-naming-server:1.0</span></code></pre></div></li>
+</ul></li>
+</ul>
+<h3 id="docker-compose">Docker Compose</h3>
+<p>We can start / stop all microservices by a single click using
+<code>docker-compose</code></p>
+<ul>
+<li><p><strong><em>docker-compose.yml</em></strong></p>
+<div class="sourceCode" id="cb50"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;3.7&#39;</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">currency-exchange</span><span class="kw">:</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-currency-exchange-service:0.0.1-SNAPSHOT</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8000:8000&quot;</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> naming-server</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">EUREKA.CLIENT.SERVICEURL.DEFAULTZONE</span><span class="kw">:</span><span class="at"> http://naming-server:8761/eureka</span></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MANAGEMENT.ZIPKIN.TRACING.ENDPOINT</span><span class="kw">:</span><span class="at"> http://zipkin-server:9411/api/v2/spans</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">currency-conversion</span><span class="kw">:</span></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-currency-conversion:1.0</span></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8100:8100&quot;</span></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> naming-server</span></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">EUREKA.CLIENT.SERVICEURL.DEFAULTZONE</span><span class="kw">:</span><span class="at"> http://naming-server:8761/eureka</span></span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MANAGEMENT.ZIPKIN.TRACING.ENDPOINT</span><span class="kw">:</span><span class="at"> http://zipkin-server:9411/api/v2/spans</span></span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">api-gateway</span><span class="kw">:</span></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-api-gateway:1.0</span></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8765:8765&quot;</span></span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> naming-server</span></span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">EUREKA.CLIENT.SERVICEURL.DEFAULTZONE</span><span class="kw">:</span><span class="at"> http://naming-server:8761/eureka</span></span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MANAGEMENT.ZIPKIN.TRACING.ENDPOINT</span><span class="kw">:</span><span class="at"> http://zipkin-server:9411/api/v2/spans</span></span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">naming-server</span><span class="kw">:</span></span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-naming-server:1.0</span></span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8761:8761&quot;</span></span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
+<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a><span class="co">  #docker run -p 9411:9411 openzipkin/zipkin:2.23</span></span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">zipkin-server</span><span class="kw">:</span></span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> openzipkin/zipkin:2.23</span></span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 300m</span></span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;9411:9411&quot;</span></span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
+<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span><span class="co"> #Restart if there is a problem starting up</span></span>
+<span id="cb50-62"><a href="#cb50-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-63"><a href="#cb50-63" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-64"><a href="#cb50-64" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">currency-network</span><span class="kw">:</span></span></code></pre></div></li>
+<li><p>Commands :</p>
+<div class="sourceCode" id="cb51"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># turn up server in detached mode</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker compose up <span class="at">-d</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop and remove containers, networks</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker compose down</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop services</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker compose stop</span></code></pre></div></li>
+</ul>
+<hr />
+<h2 id="kubernetes">Kubernetes</h2>
 <hr />
 <h1 id="todo">#TODO</h1>
 <ol type="1">

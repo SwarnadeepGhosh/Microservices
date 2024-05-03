@@ -359,48 +359,14 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 | Application                 | URL                                                          |
 | --------------------------- | ------------------------------------------------------------ |
-| Limits Service              | http://localhost:8080/limits <br />http://localhost:8080/actuator/refresh (POST) |
-| Spring Cloud Config Server  | http://localhost:8888/limits-service/default <br />http://localhost:8888/limits-service/dev |
-| Currency Exchange Service   | http://localhost:8000/currency-exchange/from/EUR/to/INR <br />http://localhost:8001/currency-exchange/from/USD/to/INR |
+| Limits Service              | [http://localhost:8080/limits](http://localhost:8080/limits) <br />[http://localhost:8080/actuator/refresh](http://localhost:8080/actuator/refresh) (POST) |
+| Spring Cloud Config Server  | [http://localhost:8888/limits-service/default](http://localhost:8888/limits-service/default) <br />[http://localhost:8888/limits-service/dev](http://localhost:8888/limits-service/dev) |
+| Currency Exchange Service   | [http://localhost:8000/currency-exchange/from/EUR/to/INR](http://localhost:8000/currency-exchange/from/EUR/to/INR) <br />[http://localhost:8000/currency-exchange/from/USD/to/INR](http://localhost:8000/currency-exchange/from/USD/to/INR) |
 | Currency Conversion Service | [http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10) |
 | Eureka Naming Server        | [Eureka Console - http://localhost:8761/](http://localhost:8761/) |
-| API Gateway                 | [http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR](http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR) <br />[http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10) |
-| Zipkin                      | [http://localhost:9411/zipkin/](http://localhost:9411/zipkin/) |
+| Spring Cloud API Gateway    | [http://localhost:8765/currency-exchange/from/USD/to/INR](http://localhost:8765/currency-exchange/from/USD/to/INR)<br />[http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10)<br />[http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10) |
+| Zipkin Distributed Tracing  | [http://localhost:9411/zipkin/](http://localhost:9411/zipkin/) |
 | Spring Cloud Bus Refresh    | http://localhost:8080/actuator/bus-refresh (POST)            |
-
-
-
-
-
-**URLS**
-
-```
-Currency Exchange Service
-http://localhost:8000/currency-exchange/from/USD/to/INR
-
-Currency Conversion Service
-http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10
-http://localhost:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
-
-Eureka
-http://localhost:8761/
-
-API GATEWAY
-http://localhost:8765/CURRENCY-EXCHANGE/currency-exchange/from/USD/to/INR
-http://localhost:8765/CURRENCY-CONVERSION/currency-conversion/from/USD/to/INR/quantity/10
-http://localhost:8765/CURRENCY-CONVERSION/currency-conversion-feign/from/USD/to/INR/quantity/10
-
-http://localhost:8765/currency-exchange/currency-exchange/from/USD/to/INR
-http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10
-http://localhost:8765/currency-conversion/currency-conversion-feign/from/USD/to/INR/quantity/10
-
-http://localhost:8765/currency-exchange/from/USD/to/INR
-http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10
-http://localhost:8765/currency-conversion-feign/from/USD/to/INR/quantity/10
-http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10
-```
-
-
 
 
 
@@ -1340,7 +1306,10 @@ We need to add dependencies and properties in other microservices i.e. `api-gate
   - Push Docker Image to DockerHub
 
     ```sh
-    $ docker push docker.io/swarnadeepghosh/ms-currency-exchange:0.0.1-SNAPSHOT
+    $ docker push docker.io/swarnadeepghosh/ms-currency-exchange:1.0
+    $ docker push docker.io/swarnadeepghosh/ms-currency-conversion:1.0
+    $ docker push docker.io/swarnadeepghosh/ms-api-gateway:1.0
+    $ docker push docker.io/swarnadeepghosh/ms-naming-server:1.0
     ```
 
 
@@ -1357,7 +1326,7 @@ We can start / stop all microservices by a single click using `docker-compose`
   services:
   
     currency-exchange:
-      image: swarnadeepghosh/ms-currency-exchange-service:0.0.1-SNAPSHOT
+      image: swarnadeepghosh/ms-currency-exchange:1.0
       mem_limit: 700m
       ports:
         - "8000:8000"
@@ -1370,7 +1339,7 @@ We can start / stop all microservices by a single click using `docker-compose`
         MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
   
     currency-conversion:
-      image: swarnadeepghosh/ms-currency-conversion-service:1.0
+      image: swarnadeepghosh/ms-currency-conversion:1.0
       mem_limit: 700m
       ports:
         - "8100:8100"
@@ -1403,7 +1372,7 @@ We can start / stop all microservices by a single click using `docker-compose`
       networks:
         - currency-network
   
-  #docker run -p 9411:9411 openzipkin/zipkin:2.23
+    #docker run -p 9411:9411 openzipkin/zipkin:2.23
   
     zipkin-server:
       image: openzipkin/zipkin:2.23
