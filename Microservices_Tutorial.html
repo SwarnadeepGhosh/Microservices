@@ -116,13 +116,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </ul></li>
           <li><a href="#microservicesv1"
           id="toc-microservicesv1">Microservices(V1)</a></li>
-          <li><a href="#microservicesv2"
-          id="toc-microservicesv2"><strong>Microservices(V2)</strong></a>
+          <li><a href="#microservicesv3"
+          id="toc-microservicesv3"><strong>Microservices(V3)</strong></a>
           <ul>
           <li><a href="#standardized-ports"
           id="toc-standardized-ports">Standardized Ports</a></li>
           <li><a href="#standardized-urls"
           id="toc-standardized-urls">Standardized URLs</a></li>
+          <li><a href="#hosted-urls" id="toc-hosted-urls">Hosted
+          URLs</a></li>
           <li><a href="#currency-config-repository"
           id="toc-currency-config-repository">Currency Config
           Repository</a></li>
@@ -539,7 +541,10 @@ Config Server</em></strong></li>
 <li>FAULT TOLERANCE - <strong><em>Hystrix</em></strong></li>
 </ul>
 <hr />
-<h1 id="microservicesv2"><strong>Microservices(V2)</strong></h1>
+<h1 id="microservicesv3"><strong>Microservices(V3)</strong></h1>
+<p><strong><a
+href="https://github.com/in28minutes/spring-microservices-v3">Reference
+Git Repo</a></strong></p>
 <p><strong>Problems and Solutions for each problem :</strong></p>
 <ul>
 <li>CENTRALIZED CONFIGURATION MANAGEMENT - <strong><em>Spring Cloud
@@ -657,6 +662,69 @@ href="http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10"
 <td>Zipkin Distributed Tracing</td>
 <td><a
 href="http://localhost:9411/zipkin/">http://localhost:9411/zipkin/</a></td>
+</tr>
+<tr class="even">
+<td>Spring Cloud Bus Refresh</td>
+<td>http://localhost:8080/actuator/bus-refresh (POST)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hosted-urls">Hosted URLs</h3>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Application</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Limits Service</td>
+<td><a
+href="http://localhost:8080/limits">http://localhost:8080/limits</a>
+<br /><a
+href="http://localhost:8080/actuator/refresh">http://localhost:8080/actuator/refresh</a>
+(POST)</td>
+</tr>
+<tr class="even">
+<td>Spring Cloud Config Server</td>
+<td><a
+href="http://localhost:8888/limits-service/default">http://localhost:8888/limits-service/default</a>
+<br /><a
+href="http://localhost:8888/limits-service/dev">http://localhost:8888/limits-service/dev</a></td>
+</tr>
+<tr class="odd">
+<td>Currency Exchange Service</td>
+<td><a
+href="http://sg-test.eastus.cloudapp.azure.com:8000/currency-exchange/from/EUR/to/INR">http://sg-test.eastus.cloudapp.azure.com:8000/currency-exchange/from/EUR/to/INR</a>
+<br /><a
+href="http://sg-test.eastus.cloudapp.azure.com:8000/currency-exchange/from/USD/to/INR">http://sg-test.eastus.cloudapp.azure.com:8000/currency-exchange/from/USD/to/INR</a></td>
+</tr>
+<tr class="even">
+<td>Currency Conversion Service</td>
+<td><a
+href="http://sg-test.eastus.cloudapp.azure.com:8100/currency-conversion/from/USD/to/INR/quantity/10">http://sg-test.eastus.cloudapp.azure.com:8100/currency-conversion/from/USD/to/INR/quantity/10</a></td>
+</tr>
+<tr class="odd">
+<td>Eureka Naming Server</td>
+<td><a
+href="http://sg-test.eastus.cloudapp.azure.com:8761/">http://sg-test.eastus.cloudapp.azure.com:8761/</a></td>
+</tr>
+<tr class="even">
+<td>Spring Cloud API Gateway</td>
+<td><a
+href="http://sg-test.eastus.cloudapp.azure.com:8765/currency-exchange/from/USD/to/INR">http://sg-test.eastus.cloudapp.azure.com:8765/currency-exchange/from/USD/to/INR</a><br /><a
+href="http://sg-test.eastus.cloudapp.azure.com:8765/currency-conversion/from/USD/to/INR/quantity/10">http://sg-test.eastus.cloudapp.azure.com:8765/currency-conversion/from/USD/to/INR/quantity/10</a><br /><a
+href="http://sg-test.eastus.cloudapp.azure.com:8765/currency-conversion-new/from/USD/to/INR/quantity/10">http://sg-test.eastus.cloudapp.azure.com:8765/currency-conversion-new/from/USD/to/INR/quantity/10</a></td>
+</tr>
+<tr class="odd">
+<td>Zipkin Distributed Tracing</td>
+<td><a
+href="http://sg-test.eastus.cloudapp.azure.com:9411/zipkin/">http://sg-test.eastus.cloudapp.azure.com:9411/zipkin/</a></td>
 </tr>
 <tr class="even">
 <td>Spring Cloud Bus Refresh</td>
@@ -1573,7 +1641,7 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb47-1"><a href="#
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker run <span class="at">-p</span> 8000:8000 <span class="at">-d</span> <span class="at">--name</span><span class="op">=</span>currency-exchange swarnadeepghosh/ms-currency-exchange:0.0.1-SNAPSHOT</span></code></pre></div></li>
 <li><p>Push Docker Image to DockerHub</p>
 <div class="sourceCode" id="cb49"><pre
-class="sourceCode sh"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker push docker.io/swarnadeepghosh/ms-currency-exchange:0.0.1-SNAPSHOT</span>
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker push docker.io/swarnadeepghosh/ms-currency-exchange:1.0</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker push docker.io/swarnadeepghosh/ms-currency-conversion:1.0</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker push docker.io/swarnadeepghosh/ms-api-gateway:1.0</span>
 <span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker push docker.io/swarnadeepghosh/ms-naming-server:1.0</span></code></pre></div></li>
@@ -1590,7 +1658,7 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb50-1"><a href=
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
 <span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">currency-exchange</span><span class="kw">:</span></span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-currency-exchange-service:0.0.1-SNAPSHOT</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-currency-exchange:1.0</span></span>
 <span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
 <span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
 <span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8000:8000&quot;</span></span>
