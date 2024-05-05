@@ -359,16 +359,19 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 ### Standardized URLs
 
-| Application                 | URL                                                          |
-| --------------------------- | ------------------------------------------------------------ |
-| Limits Service              | [http://localhost:8080/limits](http://localhost:8080/limits) <br />[http://localhost:8080/actuator/refresh](http://localhost:8080/actuator/refresh) (POST) |
-| Spring Cloud Config Server  | [http://localhost:8888/limits-service/default](http://localhost:8888/limits-service/default) <br />[http://localhost:8888/limits-service/dev](http://localhost:8888/limits-service/dev) |
-| Currency Exchange Service   | [http://localhost:8000/currency-exchange/from/EUR/to/INR](http://localhost:8000/currency-exchange/from/EUR/to/INR) <br />[http://localhost:8000/currency-exchange/from/USD/to/INR](http://localhost:8000/currency-exchange/from/USD/to/INR) |
-| Currency Conversion Service | [http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10) |
-| Eureka Naming Server        | [Eureka Console - http://localhost:8761/](http://localhost:8761/) |
-| Spring Cloud API Gateway    | [http://localhost:8765/currency-exchange/from/USD/to/INR](http://localhost:8765/currency-exchange/from/USD/to/INR)<br />[http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10)<br />[http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10) |
-| Zipkin Distributed Tracing  | [http://localhost:9411/zipkin/](http://localhost:9411/zipkin/) |
-| Spring Cloud Bus Refresh    | http://localhost:8080/actuator/bus-refresh (POST)            |
+| Application                         | URL                                                          |
+| ----------------------------------- | ------------------------------------------------------------ |
+| Limits Service                      | [http://localhost:8080/limits](http://localhost:8080/limits) <br />[http://localhost:8080/actuator/refresh](http://localhost:8080/actuator/refresh) (POST) |
+| Spring Cloud Config Server          | [http://localhost:8888/limits-service/default](http://localhost:8888/limits-service/default) <br />[http://localhost:8888/limits-service/dev](http://localhost:8888/limits-service/dev) |
+| Currency Exchange Service           | [http://localhost:8000/currency-exchange/from/EUR/to/INR](http://localhost:8000/currency-exchange/from/EUR/to/INR) <br />[http://localhost:8000/currency-exchange/from/USD/to/INR](http://localhost:8000/currency-exchange/from/USD/to/INR) |
+| Currency Conversion Service         | [http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10) |
+| Eureka Naming Server                | [Eureka Console - http://localhost:8761/](http://localhost:8761/) |
+| Spring Cloud API Gateway            | [http://localhost:8765/currency-exchange/from/USD/to/INR](http://localhost:8765/currency-exchange/from/USD/to/INR)<br />[http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10)<br />[http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10](http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10) |
+| Zipkin Distributed Tracing          | [http://localhost:9411/zipkin/](http://localhost:9411/zipkin/) |
+| Spring Cloud Bus Refresh            | http://localhost:8080/actuator/bus-refresh (POST)            |
+| Logging- ELK Stack - Elastic Search | [http://localhost:9200/](http://localhost:9200/)             |
+| Logging- ELK Stack - LogStash       |                                                              |
+| Logging- ELK Stack - Kibana         | [http://localhost:5601/](http://localhost:5601/)             |
 
 
 
@@ -1354,6 +1357,7 @@ We can start / stop all microservices by a single click using `docker-compose`
       environment:
         EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
         MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
+      restart: always
   
     currency-conversion:
       image: swarnadeepghosh/ms-currency-conversion:1.0
@@ -1367,6 +1371,7 @@ We can start / stop all microservices by a single click using `docker-compose`
       environment:
         EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
         MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
+      restart: always
   
     api-gateway:
       image: swarnadeepghosh/ms-api-gateway:1.0
@@ -1380,6 +1385,7 @@ We can start / stop all microservices by a single click using `docker-compose`
       environment:
         EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
         MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
+      restart: always
   
     naming-server:
       image: swarnadeepghosh/ms-naming-server:1.0
@@ -1388,7 +1394,8 @@ We can start / stop all microservices by a single click using `docker-compose`
         - "8761:8761"
       networks:
         - currency-network
-  
+      restart: always
+      
     #docker run -p 9411:9411 openzipkin/zipkin:2.23
   
     zipkin-server:
@@ -1417,7 +1424,123 @@ We can start / stop all microservices by a single click using `docker-compose`
   $ docker compose stop
   ```
 
+
+
+
+
+
+---
+
+## **Logging - ELK Stack**
+
+<img src="https://www.oreilly.com/api/v2/epubs/9781788831031/files/assets/eb9e7387-5624-495f-8471-4a1740665998.png" alt="What is ELK Stack? - Mastering Kibana 6.x [Book]" style="zoom:67%;" />
+
+
+
+| Service                             | Default URL                                      | Download Link                                                |
+| ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| Logging- ELK Stack - Elastic Search | [http://localhost:9200/](http://localhost:9200/) | [https://www.elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch) |
+| Logging- ELK Stack - LogStash       |                                                  | [https://www.elastic.co/downloads/logstash](https://www.elastic.co/downloads/logstash) |
+| Logging- ELK Stack - Kibana         | [http://localhost:5601/](http://localhost:5601/) | [https://www.elastic.co/downloads/kibana](https://www.elastic.co/downloads/kibana) |
+
+**Steps to setup in local:** 
+
+- Download and unzip in local system.
+
+- <u>**Setup Elastic Search :**</u> 
+
+  - Go to ***elasticsearch-8.13.3\config\elasticsearch.yml*** - Update all these security features to false to make this app work in HTTP, unless this app will start on https.
+
+    ```yaml
+    # Enable security features
+    xpack.security.enabled: false
+    
+    xpack.security.enrollment.enabled: false
+    
+    # Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
+    xpack.security.http.ssl:
+      enabled: false
+      keystore.path: certs/http.p12
+    
+    # Enable encryption and mutual authentication between cluster nodes
+    xpack.security.transport.ssl:
+      enabled: false
+      verification_mode: certificate
+      keystore.path: certs/transport.p12
+      truststore.path: certs/transport.p12
+    ```
+
+  - Go to `elasticsearch-<version>\bin` and execute the following command
+
+    ```powershell
+    > elasticsearch.bat
+
+  - Visit [http://localhost:9200/](http://localhost:9200/) and you must receive similar output
+
+    ```json
+    {
+      "name" : "SWARNADEEP",
+      "cluster_name" : "elasticsearch",
+      "cluster_uuid" : "YJZypVxUQKKfJIGqWpYoBA",
+      "version" : {
+        "number" : "8.13.3",
+        "build_flavor" : "default",
+        "build_type" : "zip",
+        "build_hash" : "617f7b76c4ebcb5a7f1e70d409a99c437c896aea",
+        "build_date" : "2024-04-29T22:05:16.051731935Z",
+        "build_snapshot" : false,
+        "lucene_version" : "9.10.0",
+        "minimum_wire_compatibility_version" : "7.17.0",
+        "minimum_index_compatibility_version" : "7.0.0"
+      },
+      "tagline" : "You Know, for Search"
+    }
+    ```
+
+  -  Copy the following values and save them.
+
+    - Password for the elastic user : 
+    - Enrollment token : 
+
+    ```
+    To Generate a new enrollment key
+    1. Go to elasticsearch-<version>-<os>-<system-type>\elasticsearch-<version>\bin
+    2. Run elasticsearch-create-enrollment-token.bat - url https://localhost:9200 -s kibana
+    /elasticsearch-create-enrollment-token -s kibana
+    
+    To Reset the elastic user password
+    1. Go to elasticsearch-<version>-<os>-<system-type>\elasticsearch-<version>\bin
+    2. Run ./elasticsearch-reset-password.bat -u elastic
+    ```
+
+  - 
+
+- <u>**Setup Kibana :**</u> 
+
+  - Open ***kibana-8.13.3\config\kibana.yml***
+
+    ```yaml
+    # Uncomment below line as per elastic search host url
+    elasticsearch.hosts: ["http://localhost:9200"]
+    ```
+
+  - Go to `kibana-<version>\bin` and execute the following command
+
+    ```powershell
+    > kibana.bat
+    ```
+
+  - 
+
   
+
+- **<u>Setup Logstash :</u>** 
+
+  - 
+
+
+
+
 
 ---
 
