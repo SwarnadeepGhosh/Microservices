@@ -103,10 +103,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </ul>-->
           <ul>
           <li><a href="#microservices-tutorial"
-          id="toc-microservices-tutorial">Microservices
-          Tutorial</a></li>
+          id="toc-microservices-tutorial">Microservices Tutorial</a>
+          <ul>
           <li><a href="#web-service" id="toc-web-service">Web
           Service</a></li>
+          </ul></li>
           <li><a href="#building-rest-api"
           id="toc-building-rest-api">Building REST API</a>
           <ul>
@@ -119,12 +120,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <li><a href="#microservicesv3"
           id="toc-microservicesv3"><strong>Microservices(V3)</strong></a>
           <ul>
+          <li><a href="#ports-and-urls" id="toc-ports-and-urls">Ports
+          and URLs</a>
+          <ul>
           <li><a href="#standardized-ports"
           id="toc-standardized-ports">Standardized Ports</a></li>
           <li><a href="#standardized-urls"
           id="toc-standardized-urls">Standardized URLs</a></li>
           <li><a href="#hosted-urls" id="toc-hosted-urls">Hosted
           URLs</a></li>
+          </ul></li>
           <li><a href="#currency-config-repository"
           id="toc-currency-config-repository">Currency Config
           Repository</a></li>
@@ -187,6 +192,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <li><a href="#docker-compose" id="toc-docker-compose">Docker
           Compose</a></li>
           </ul></li>
+          <li><a href="#logging---elk-stack"
+          id="toc-logging---elk-stack"><strong>Logging - ELK
+          Stack</strong></a></li>
           <li><a href="#kubernetes"
           id="toc-kubernetes">Kubernetes</a></li>
           </ul></li>
@@ -196,6 +204,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
         
 <h1 id="microservices-tutorial">Microservices Tutorial</h1>
+<p><strong>Table of Contents</strong></p>
+<ul>
+<li><a href="#web-service">Web Service</a></li>
+<li><a href="#building-rest-api">Building REST API</a></li>
+<li><a href="#microservicesv1">Microservices(V1)</a></li>
+<li><a href="#microservicesv3"><strong>Microservices(V3)</strong></a>
+<ul>
+<li><a href="#ports-and-urls">Ports and URLs</a></li>
+<li><a href="#currency-config-repository">Currency Config
+Repository</a></li>
+<li><a href="#config-server-microservice">Config Server
+Microservice</a></li>
+<li><a href="#limits-microservice">Limits Microservice</a></li>
+<li><a href="#currency-exchange">Currency Exchange</a></li>
+<li><a href="#currency-conversion">Currency Conversion</a></li>
+<li><a href="#eureka-naming-server"><strong>Eureka Naming
+Server</strong></a></li>
+<li><a href="#load-balancing-with-eureka"><strong>Load Balancing with
+Eureka</strong></a></li>
+<li><a href="#spring-cloud-api-gateway"><strong>Spring Cloud API
+Gateway</strong></a></li>
+<li><a href="#circuit-breaker--resilience4j"><strong>Circuit Breaker-
+Resilience4j</strong></a></li>
+<li><a href="#observability-and-opentelemetry"><strong>Observability and
+OpenTelemetry</strong></a></li>
+<li><a href="#zipkin---distributed-tracing"><strong>Zipkin - Distributed
+Tracing</strong></a></li>
+<li><a href="#docker---container-orchestration">Docker - Container
+Orchestration</a></li>
+<li><a href="#logging---elk-stack"><strong>Logging - ELK
+Stack</strong></a></li>
+<li><a href="#kubernetes">Kubernetes</a></li>
+</ul></li>
+<li><a href="#todo">#TODO</a></li>
+</ul>
 <p><strong>Tech Stack :</strong></p>
 <p><img src="https://pbs.twimg.com/profile_images/1235868806079057921/fTL08u_H_400x400.png" alt="Spring Boot (@springboot) / X" style="zoom: 33%;" />
 <img src="https://static.javatpoint.com/tutorial/spring-cloud/images/spring-cloud.png" alt="Spring Cloud Tutorial - Javatpoint" style="zoom: 50%;" />
@@ -214,7 +257,7 @@ href="https://www.udemy.com/course/microservices-with-spring-boot-and-spring-clo
 Course Link</a></p>
 <p><img src="images/roadmap1.png" alt="" style="zoom: 67%;" /></p>
 <p><img src="images/roadmap2.png" alt="" style="zoom: 67%;" /></p>
-<h1 id="web-service">Web Service</h1>
+<h2 id="web-service">Web Service</h2>
 <blockquote>
 <p><strong>Definition : </strong> Software system designed to support
 interoperable machine-to-machine interaction over a network.</p>
@@ -567,6 +610,7 @@ Metrics</li>
 <li><strong>Micrometer</strong> (Replaces Spring Cloud Sleuth)</li>
 </ul>
 <p><img src="images/dia1.png" alt="transport" style="zoom: 43%;" /></p>
+<h2 id="ports-and-urls">Ports and URLs</h2>
 <h3 id="standardized-ports">Standardized Ports</h3>
 <table>
 <thead>
@@ -609,8 +653,8 @@ Metrics</li>
 <h3 id="standardized-urls">Standardized URLs</h3>
 <table>
 <colgroup>
-<col style="width: 31%" />
-<col style="width: 68%" />
+<col style="width: 36%" />
+<col style="width: 63%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -666,6 +710,18 @@ href="http://localhost:9411/zipkin/">http://localhost:9411/zipkin/</a></td>
 <tr class="even">
 <td>Spring Cloud Bus Refresh</td>
 <td>http://localhost:8080/actuator/bus-refresh (POST)</td>
+</tr>
+<tr class="odd">
+<td>Logging- ELK Stack - Elastic Search</td>
+<td><a href="http://localhost:9200/">http://localhost:9200/</a></td>
+</tr>
+<tr class="even">
+<td>Logging- ELK Stack - LogStash</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Logging- ELK Stack - Kibana</td>
+<td><a href="http://localhost:5601/">http://localhost:5601/</a></td>
 </tr>
 </tbody>
 </table>
@@ -1669,54 +1725,58 @@ class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb50-1"><a href=
 <span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
 <span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">EUREKA.CLIENT.SERVICEURL.DEFAULTZONE</span><span class="kw">:</span><span class="at"> http://naming-server:8761/eureka</span></span>
 <span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MANAGEMENT.ZIPKIN.TRACING.ENDPOINT</span><span class="kw">:</span><span class="at"> http://zipkin-server:9411/api/v2/spans</span></span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">currency-conversion</span><span class="kw">:</span></span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-currency-conversion:1.0</span></span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
-<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
-<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8100:8100&quot;</span></span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
-<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
-<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
-<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> naming-server</span></span>
-<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">EUREKA.CLIENT.SERVICEURL.DEFAULTZONE</span><span class="kw">:</span><span class="at"> http://naming-server:8761/eureka</span></span>
-<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MANAGEMENT.ZIPKIN.TRACING.ENDPOINT</span><span class="kw">:</span><span class="at"> http://zipkin-server:9411/api/v2/spans</span></span>
-<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">api-gateway</span><span class="kw">:</span></span>
-<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-api-gateway:1.0</span></span>
-<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
-<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
-<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8765:8765&quot;</span></span>
-<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
-<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
-<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
-<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> naming-server</span></span>
-<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">EUREKA.CLIENT.SERVICEURL.DEFAULTZONE</span><span class="kw">:</span><span class="at"> http://naming-server:8761/eureka</span></span>
-<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MANAGEMENT.ZIPKIN.TRACING.ENDPOINT</span><span class="kw">:</span><span class="at"> http://zipkin-server:9411/api/v2/spans</span></span>
-<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">naming-server</span><span class="kw">:</span></span>
-<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-naming-server:1.0</span></span>
-<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
-<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
-<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8761:8761&quot;</span></span>
-<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
-<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
-<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a><span class="co">  #docker run -p 9411:9411 openzipkin/zipkin:2.23</span></span>
-<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">zipkin-server</span><span class="kw">:</span></span>
-<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> openzipkin/zipkin:2.23</span></span>
-<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 300m</span></span>
-<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
-<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;9411:9411&quot;</span></span>
-<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
-<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
-<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span><span class="co"> #Restart if there is a problem starting up</span></span>
-<span id="cb50-62"><a href="#cb50-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-63"><a href="#cb50-63" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
-<span id="cb50-64"><a href="#cb50-64" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">currency-network</span><span class="kw">:</span></span></code></pre></div></li>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">currency-conversion</span><span class="kw">:</span></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-currency-conversion:1.0</span></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8100:8100&quot;</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> naming-server</span></span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">EUREKA.CLIENT.SERVICEURL.DEFAULTZONE</span><span class="kw">:</span><span class="at"> http://naming-server:8761/eureka</span></span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MANAGEMENT.ZIPKIN.TRACING.ENDPOINT</span><span class="kw">:</span><span class="at"> http://zipkin-server:9411/api/v2/spans</span></span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">api-gateway</span><span class="kw">:</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-api-gateway:1.0</span></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8765:8765&quot;</span></span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> naming-server</span></span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">EUREKA.CLIENT.SERVICEURL.DEFAULTZONE</span><span class="kw">:</span><span class="at"> http://naming-server:8761/eureka</span></span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MANAGEMENT.ZIPKIN.TRACING.ENDPOINT</span><span class="kw">:</span><span class="at"> http://zipkin-server:9411/api/v2/spans</span></span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">naming-server</span><span class="kw">:</span></span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> swarnadeepghosh/ms-naming-server:1.0</span></span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 700m</span></span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8761:8761&quot;</span></span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a><span class="co">  #docker run -p 9411:9411 openzipkin/zipkin:2.23</span></span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">zipkin-server</span><span class="kw">:</span></span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> openzipkin/zipkin:2.23</span></span>
+<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mem_limit</span><span class="kw">:</span><span class="at"> 300m</span></span>
+<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb50-62"><a href="#cb50-62" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;9411:9411&quot;</span></span>
+<span id="cb50-63"><a href="#cb50-63" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-64"><a href="#cb50-64" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> currency-network</span></span>
+<span id="cb50-65"><a href="#cb50-65" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span><span class="co"> #Restart if there is a problem starting up</span></span>
+<span id="cb50-66"><a href="#cb50-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-67"><a href="#cb50-67" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
+<span id="cb50-68"><a href="#cb50-68" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">currency-network</span><span class="kw">:</span></span></code></pre></div></li>
 <li><p>Commands :</p>
 <div class="sourceCode" id="cb51"><pre
 class="sourceCode sh"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># turn up server in detached mode</span></span>
@@ -1727,6 +1787,123 @@ class="sourceCode sh"><code class="sourceCode bash"><span id="cb51-1"><a href="#
 <span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop services</span></span>
 <span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker compose stop</span></code></pre></div></li>
+</ul>
+<hr />
+<h2 id="logging---elk-stack"><strong>Logging - ELK Stack</strong></h2>
+<p><img src="https://www.oreilly.com/api/v2/epubs/9781788831031/files/assets/eb9e7387-5624-495f-8471-4a1740665998.png" alt="What is ELK Stack? - Mastering Kibana 6.x [Book]" style="zoom:67%;" /></p>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 33%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Service</th>
+<th>Default URL</th>
+<th>Download Link</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Logging- ELK Stack - Elastic Search</td>
+<td><a href="http://localhost:9200/">http://localhost:9200/</a></td>
+<td><a
+href="https://www.elastic.co/downloads/elasticsearch">https://www.elastic.co/downloads/elasticsearch</a></td>
+</tr>
+<tr class="even">
+<td>Logging- ELK Stack - LogStash</td>
+<td></td>
+<td><a
+href="https://www.elastic.co/downloads/logstash">https://www.elastic.co/downloads/logstash</a></td>
+</tr>
+<tr class="odd">
+<td>Logging- ELK Stack - Kibana</td>
+<td><a href="http://localhost:5601/">http://localhost:5601/</a></td>
+<td><a
+href="https://www.elastic.co/downloads/kibana">https://www.elastic.co/downloads/kibana</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Steps to setup in local:</strong></p>
+<ul>
+<li><p>Download and unzip in local system.</p></li>
+<li><p><u><strong>Setup Elastic Search :</strong></u></p>
+<ul>
+<li><p>Go to <strong><em>elasticsearch-8.13.3.yml</em></strong> - Update
+all these security features to false to make this app work in HTTP,
+unless this app will start on https.</p>
+<div class="sourceCode" id="cb52"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable security features</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">xpack.security.enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="fu">xpack.security.enrollment.enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="fu">xpack.security.http.ssl</span><span class="kw">:</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">keystore.path</span><span class="kw">:</span><span class="at"> certs/http.p12</span></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable encryption and mutual authentication between cluster nodes</span></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="fu">xpack.security.transport.ssl</span><span class="kw">:</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">verification_mode</span><span class="kw">:</span><span class="at"> certificate</span></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">keystore.path</span><span class="kw">:</span><span class="at"> certs/transport.p12</span></span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">truststore.path</span><span class="kw">:</span><span class="at"> certs/transport.p12</span></span></code></pre></div></li>
+<li><p>Go to <code>elasticsearch-&lt;version&gt;\bin</code> and execute
+the following command</p>
+<p>```powershell &gt; elasticsearch.bat</p></li>
+<li><p>Visit <a href="http://localhost:9200/">http://localhost:9200/</a>
+and you must receive similar output</p>
+<div class="sourceCode" id="cb53"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;name&quot;</span> <span class="fu">:</span> <span class="st">&quot;SWARNADEEP&quot;</span><span class="fu">,</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cluster_name&quot;</span> <span class="fu">:</span> <span class="st">&quot;elasticsearch&quot;</span><span class="fu">,</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cluster_uuid&quot;</span> <span class="fu">:</span> <span class="st">&quot;YJZypVxUQKKfJIGqWpYoBA&quot;</span><span class="fu">,</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span> <span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;number&quot;</span> <span class="fu">:</span> <span class="st">&quot;8.13.3&quot;</span><span class="fu">,</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;build_flavor&quot;</span> <span class="fu">:</span> <span class="st">&quot;default&quot;</span><span class="fu">,</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;build_type&quot;</span> <span class="fu">:</span> <span class="st">&quot;zip&quot;</span><span class="fu">,</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;build_hash&quot;</span> <span class="fu">:</span> <span class="st">&quot;617f7b76c4ebcb5a7f1e70d409a99c437c896aea&quot;</span><span class="fu">,</span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;build_date&quot;</span> <span class="fu">:</span> <span class="st">&quot;2024-04-29T22:05:16.051731935Z&quot;</span><span class="fu">,</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;build_snapshot&quot;</span> <span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;lucene_version&quot;</span> <span class="fu">:</span> <span class="st">&quot;9.10.0&quot;</span><span class="fu">,</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;minimum_wire_compatibility_version&quot;</span> <span class="fu">:</span> <span class="st">&quot;7.17.0&quot;</span><span class="fu">,</span></span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;minimum_index_compatibility_version&quot;</span> <span class="fu">:</span> <span class="st">&quot;7.0.0&quot;</span></span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;tagline&quot;</span> <span class="fu">:</span> <span class="st">&quot;You Know, for Search&quot;</span></span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<li><p>Copy the following values and save them.</p></li>
+<li><p>Password for the elastic user :</p></li>
+<li><p>Enrollment token :</p></li>
+</ul>
+<pre><code>To Generate a new enrollment key
+1. Go to elasticsearch-&lt;version&gt;-&lt;os&gt;-&lt;system-type&gt;\elasticsearch-&lt;version&gt;\bin
+2. Run elasticsearch-create-enrollment-token.bat - url https://localhost:9200 -s kibana
+/elasticsearch-create-enrollment-token -s kibana
+
+To Reset the elastic user password
+1. Go to elasticsearch-&lt;version&gt;-&lt;os&gt;-&lt;system-type&gt;\elasticsearch-&lt;version&gt;\bin
+2. Run ./elasticsearch-reset-password.bat -u elastic</code></pre>
+<ul>
+<li></li>
+</ul></li>
+<li><p><u><strong>Setup Kibana :</strong></u></p>
+<ul>
+<li><p>Open <strong><em>kibana-8.13.3.yml</em></strong></p>
+<div class="sourceCode" id="cb55"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment below line as per elastic search host url</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">elasticsearch.hosts</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;http://localhost:9200&quot;</span><span class="kw">]</span></span></code></pre></div></li>
+<li><p>Go to <code>kibana-&lt;version&gt;\bin</code> and execute the
+following command</p>
+<div class="sourceCode" id="cb56"><pre
+class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> kibana<span class="op">.</span><span class="fu">bat</span></span></code></pre></div></li>
+<li></li>
+</ul></li>
+<li><p><strong><u>Setup Logstash :</u></strong></p>
+<ul>
+<li></li>
+</ul></li>
 </ul>
 <hr />
 <h2 id="kubernetes">Kubernetes</h2>
@@ -1748,7 +1925,8 @@ konse and so on</p>
 just has to mention the new field, that’s it</p></li>
 <li><p>kafka with microservice</p></li>
 <li><p>redis with microservice</p></li>
-<li><p>Deploy docker image for free in render</p></li>
+<li><p>GraphQL</p></li>
+<li></li>
 </ol>
         </div>
       </div>

@@ -1,5 +1,30 @@
 # Microservices Tutorial
 
+**Table of Contents**
+
+   * [Web Service](#web-service)
+- [Building REST API](#building-rest-api)
+- [Microservices(V1)](#microservicesv1)
+- [**Microservices(V3)**](#microservicesv3)
+   - [Ports and URLs](#ports-and-urls)
+   - [Currency Config Repository](#currency-config-repository)
+   - [Config Server Microservice](#config-server-microservice)
+   - [Limits Microservice](#limits-microservice)
+   - [Currency Exchange](#currency-exchange)
+   - [Currency Conversion](#currency-conversion)
+   - [**Eureka Naming Server** ](#eureka-naming-server)
+   - [**Load Balancing with Eureka**](#load-balancing-with-eureka)
+   - [**Spring Cloud API Gateway**](#spring-cloud-api-gateway)
+   - [**Circuit Breaker- Resilience4j**](#circuit-breaker--resilience4j)
+   - [**Observability and OpenTelemetry**](#observability-and-opentelemetry)
+   - [**Zipkin - Distributed Tracing**](#zipkin---distributed-tracing)
+   - [Docker - Container Orchestration](#docker---container-orchestration)
+   - [**Logging - ELK Stack**](#logging---elk-stack)
+   - [Kubernetes](#kubernetes)
+- [#TODO](#todo)
+
+
+
 **Tech Stack :** 
 
 <img src="https://pbs.twimg.com/profile_images/1235868806079057921/fTL08u_H_400x400.png" alt="Spring Boot (@springboot) / X" style="zoom: 33%;" /> <img src="https://static.javatpoint.com/tutorial/spring-cloud/images/spring-cloud.png" alt="Spring Cloud Tutorial - Javatpoint" style="zoom: 50%;" /> <img src="https://miro.medium.com/v2/resize:fit:486/1*mwUghPGDjdVNOe8y7Pkrpg.png" alt="Implementing Service Discovery Using Netflix Eureka | by Seonggil Jeong |  Medium" style="zoom: 33%;" />  <img src="https://content.cdntwrk.com/files/aHViPTYzOTc1JmNtZD1pdGVtZWRpdG9yaW1hZ2UmZmlsZW5hbWU9aXRlbWVkaXRvcmltYWdlXzY0MjYxYmY1NzQ0ODEucG5nJnZlcnNpb249MDAwMCZzaWc9NDBhNTg4NmQ3ZGFjMzliZmY2ZDQ3Y2JhMjU5MTlhNTA%253D" alt="Announcing Spring Cloud Gateway for Kubernetes 2.0" style="zoom: 40%;" /> <img src="https://avatars.githubusercontent.com/u/11860887?v=4" alt="GitHub - openzipkin/zipkin: Zipkin is a distributed tracing system" style="zoom:25%;" /> <img src="https://i.postimg.cc/Px3XB3VL/res.png" alt="Knoldus Blogs Java - Introduction To Resilience4j" style="zoom: 50%;" /> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5hPnQgYIb2fp0KenorFRSOXY268hay_nISrnJtv-6ng&s" alt="Docker full logo transparent PNG - StickPNG" style="zoom: 70%;" />  <img src="https://sue.eu/wp-content/uploads/sites/6/2022/06/kubernetes-logo-920x920-sue-v0.png" alt="Kubernetes | SUE Cloud & IT Professionals" style="zoom: 16%;" /> <img src="https://avatars.githubusercontent.com/u/20077752?s=64&v=4" alt="OpenFeign · GitHub" style="zoom: 25%;" /> <img src="https://howtodoinjava.com/wp-content/uploads/2019/12/spring-hateoas.png" alt="Spring Boot HATEOAS Links Example" style="zoom: 25%;" />   <img src="https://miro.medium.com/v2/resize:fit:720/1*FNJ6C1uNvCAhkJR3i7pvoQ.jpeg" alt="Hystrix + Spring Boot Implementation | by Vinesh | The Jabberjays | Medium" style="zoom: 35%;" /> <img src="https://camo.githubusercontent.com/c9c03fc8fd1261971c38aafd0b95f59eee0af2b435277586949579dfe8b5198d/68747470733a2f2f692e696d6775722e636f6d2f6d52536f7345702e706e67" alt="GitHub - Netflix/zuul: Zuul is a gateway service that provides dynamic  routing, monitoring, resiliency, security, and more." style="zoom: 12%;" />
@@ -12,7 +37,7 @@
 
 
 
-# Web Service
+## Web Service
 
 > **Definition : ** Software system designed to support interoperable machine-to-machine interaction over a network.
 
@@ -344,6 +369,8 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 <img src="images/dia1.png" alt="transport" style="zoom: 43%;" />
 
 
+
+## Ports and URLs
 
 ### Standardized Ports
 
@@ -1572,4 +1599,6 @@ We can start / stop all microservices by a single click using `docker-compose`
 
 4. redis with microservice
 
-5. Deploy docker image for free in render
+5. GraphQL
+
+5. 
