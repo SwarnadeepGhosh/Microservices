@@ -125,10 +125,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <ul>
           <li><a href="#standardized-ports"
           id="toc-standardized-ports">Standardized Ports</a></li>
-          <li><a href="#standardized-urls"
-          id="toc-standardized-urls">Standardized URLs</a></li>
+          <li><a href="#standardized-local-urls"
+          id="toc-standardized-local-urls">Standardized Local
+          URLs</a></li>
           <li><a href="#hosted-urls" id="toc-hosted-urls">Hosted
           URLs</a></li>
+          <li><a href="#devops-hosted-urls"
+          id="toc-devops-hosted-urls">Devops Hosted URLs</a></li>
           </ul></li>
           <li><a href="#currency-config-repository"
           id="toc-currency-config-repository">Currency Config
@@ -650,7 +653,7 @@ Metrics</li>
 </tr>
 </tbody>
 </table>
-<h3 id="standardized-urls">Standardized URLs</h3>
+<h3 id="standardized-local-urls">Standardized Local URLs</h3>
 <table>
 <colgroup>
 <col style="width: 36%" />
@@ -664,19 +667,20 @@ Metrics</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Limits Service</td>
-<td><a
-href="http://localhost:8080/limits">http://localhost:8080/limits</a>
-<br /><a
-href="http://localhost:8080/actuator/refresh">http://localhost:8080/actuator/refresh</a>
-(POST)</td>
-</tr>
-<tr class="even">
 <td>Spring Cloud Config Server</td>
 <td><a
 href="http://localhost:8888/limits-service/default">http://localhost:8888/limits-service/default</a>
 <br /><a
 href="http://localhost:8888/limits-service/dev">http://localhost:8888/limits-service/dev</a></td>
+</tr>
+<tr class="even">
+<td>Limits Service</td>
+<td><a
+href="http://localhost:8080/limits">http://localhost:8080/limits</a>
+<br /><a
+href="http://localhost:8080/actuator/refresh">http://localhost:8080/actuator/refresh</a>
+(POST)<br />http://localhost:8080/actuator/bus-refresh (POST) - Spring
+Cloud Bus Refresh</td>
 </tr>
 <tr class="odd">
 <td>Currency Exchange Service</td>
@@ -692,15 +696,15 @@ href="http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10">htt
 </tr>
 <tr class="odd">
 <td>Eureka Naming Server</td>
-<td><a href="http://localhost:8761/">Eureka Console -
-http://localhost:8761/</a></td>
+<td><a href="http://localhost:8761/registry/">Eureka Console -
+http://localhost:8761/registry/</a></td>
 </tr>
 <tr class="even">
 <td>Spring Cloud API Gateway</td>
 <td><a
-href="http://localhost:8765/currency-exchange/from/USD/to/INR">http://localhost:8765/currency-exchange/from/USD/to/INR</a><br /><a
-href="http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10">http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10</a><br /><a
-href="http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10">http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10</a></td>
+href="http://localhost:8765/api/currency-exchange/from/USD/to/INR">http://localhost:8765/api/currency-exchange/from/USD/to/INR</a><br /><a
+href="http://localhost:8765/api/currency-conversion/from/USD/to/INR/quantity/10">http://localhost:8765/api/currency-conversion/from/USD/to/INR/quantity/10</a><br /><a
+href="http://localhost:8765/api/currency-conversion-new/from/USD/to/INR/quantity/10">http://localhost:8765/api/currency-conversion-new/from/USD/to/INR/quantity/10</a></td>
 </tr>
 <tr class="odd">
 <td>Zipkin Distributed Tracing</td>
@@ -708,33 +712,31 @@ href="http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10"
 href="http://localhost:9411/zipkin/">http://localhost:9411/zipkin/</a></td>
 </tr>
 <tr class="even">
-<td>Spring Cloud Bus Refresh</td>
-<td>http://localhost:8080/actuator/bus-refresh (POST)</td>
-</tr>
-<tr class="odd">
 <td>Logging- ELK Stack - Elastic Search</td>
 <td><a href="http://localhost:9200/">http://localhost:9200/</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Logging- ELK Stack - LogStash</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Logging- ELK Stack - Kibana</td>
 <td><a href="http://localhost:5601/">http://localhost:5601/</a></td>
 </tr>
 </tbody>
 </table>
 <h3 id="hosted-urls">Hosted URLs</h3>
-<table>
+<table style="width:100%;">
 <colgroup>
-<col style="width: 31%" />
-<col style="width: 68%" />
+<col style="width: 23%" />
+<col style="width: 52%" />
+<col style="width: 23%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th>Application</th>
 <th>URL</th>
+<th>Supervisor Application Name</th>
 </tr>
 </thead>
 <tbody>
@@ -745,6 +747,7 @@ href="http://localhost:8080/limits">http://localhost:8080/limits</a>
 <br /><a
 href="http://localhost:8080/actuator/refresh">http://localhost:8080/actuator/refresh</a>
 (POST)</td>
+<td></td>
 </tr>
 <tr class="even">
 <td>Spring Cloud Config Server</td>
@@ -752,6 +755,7 @@ href="http://localhost:8080/actuator/refresh">http://localhost:8080/actuator/ref
 href="http://localhost:8888/limits-service/default">http://localhost:8888/limits-service/default</a>
 <br /><a
 href="http://localhost:8888/limits-service/dev">http://localhost:8888/limits-service/dev</a></td>
+<td>config-server</td>
 </tr>
 <tr class="odd">
 <td>Currency Exchange Service</td>
@@ -759,16 +763,19 @@ href="http://localhost:8888/limits-service/dev">http://localhost:8888/limits-ser
 href="http://sg-test.eastus.cloudapp.azure.com:8000/currency-exchange/from/EUR/to/INR">http://sg-test.eastus.cloudapp.azure.com:8000/currency-exchange/from/EUR/to/INR</a>
 <br /><a
 href="http://sg-test.eastus.cloudapp.azure.com:8000/currency-exchange/from/USD/to/INR">http://sg-test.eastus.cloudapp.azure.com:8000/currency-exchange/from/USD/to/INR</a></td>
+<td>currency-exchange</td>
 </tr>
 <tr class="even">
 <td>Currency Conversion Service</td>
 <td><a
 href="http://sg-test.eastus.cloudapp.azure.com:8100/currency-conversion/from/USD/to/INR/quantity/10">http://sg-test.eastus.cloudapp.azure.com:8100/currency-conversion/from/USD/to/INR/quantity/10</a></td>
+<td>currency-conversion</td>
 </tr>
 <tr class="odd">
 <td>Eureka Naming Server</td>
 <td><a
 href="http://sg-test.eastus.cloudapp.azure.com:8761/">http://sg-test.eastus.cloudapp.azure.com:8761/</a></td>
+<td>naming-server</td>
 </tr>
 <tr class="even">
 <td>Spring Cloud API Gateway</td>
@@ -776,15 +783,60 @@ href="http://sg-test.eastus.cloudapp.azure.com:8761/">http://sg-test.eastus.clou
 href="http://sg-test.eastus.cloudapp.azure.com:8765/currency-exchange/from/USD/to/INR">http://sg-test.eastus.cloudapp.azure.com:8765/currency-exchange/from/USD/to/INR</a><br /><a
 href="http://sg-test.eastus.cloudapp.azure.com:8765/currency-conversion/from/USD/to/INR/quantity/10">http://sg-test.eastus.cloudapp.azure.com:8765/currency-conversion/from/USD/to/INR/quantity/10</a><br /><a
 href="http://sg-test.eastus.cloudapp.azure.com:8765/currency-conversion-new/from/USD/to/INR/quantity/10">http://sg-test.eastus.cloudapp.azure.com:8765/currency-conversion-new/from/USD/to/INR/quantity/10</a></td>
+<td>api-gateway</td>
 </tr>
 <tr class="odd">
 <td>Zipkin Distributed Tracing</td>
 <td><a
-href="http://sg-test.eastus.cloudapp.azure.com:9411/zipkin/">http://sg-test.eastus.cloudapp.azure.com:9411/zipkin/</a></td>
+href="https://swarnadeep.centralindia.cloudapp.azure.com/zipkin/">https://swarnadeep.centralindia.cloudapp.azure.com/zipkin/</a></td>
+<td>zipkin</td>
+</tr>
+</tbody>
+</table>
+<h3 id="devops-hosted-urls">Devops Hosted URLs</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 50%" />
+<col style="width: 20%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Service</th>
+<th>URL</th>
+<th>Username</th>
+<th>Password</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Jenkins</td>
+<td><a
+href="https://swarnadeep.centralindia.cloudapp.azure.com/">https://swarnadeep.centralindia.cloudapp.azure.com/</a></td>
+<td>swarnadeep</td>
+<td>swarnadeep</td>
 </tr>
 <tr class="even">
-<td>Spring Cloud Bus Refresh</td>
-<td>http://localhost:8080/actuator/bus-refresh (POST)</td>
+<td>Tomcat</td>
+<td><a
+href="https://swarnadeep.centralindia.cloudapp.azure.com/tomcat/">https://swarnadeep.centralindia.cloudapp.azure.com/tomcat/</a></td>
+<td>swarnadeep</td>
+<td>swarnadeep</td>
+</tr>
+<tr class="odd">
+<td>Sonarqube</td>
+<td><a
+href="https://swarnadeep.centralindia.cloudapp.azure.com/sonar/">https://swarnadeep.centralindia.cloudapp.azure.com/sonar/</a></td>
+<td>swarnadeep<br />or admin</td>
+<td>Password@123</td>
+</tr>
+<tr class="even">
+<td>Supervisor - Monitoring</td>
+<td><a
+href="https://swarnadeep.centralindia.cloudapp.azure.com/monitor/">https://swarnadeep.centralindia.cloudapp.azure.com/monitor/</a></td>
+<td>swarnadeep</td>
+<td>swarnadeep</td>
 </tr>
 </tbody>
 </table>
