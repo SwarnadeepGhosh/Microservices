@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         APP_NAME = 'api-gateway'
-        APP_BRANCH = 'dev'
+        APP_BRANCH = 'master'
         JAR_NAME = 'api-gateway-2.0'
         CONTEXT_PATH = 'api'
         SERVER_PORT = '8765'
