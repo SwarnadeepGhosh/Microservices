@@ -1,0 +1,118 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = 'api-gateway'
+        APP_BRANCH = 'dev'
+        JAR_NAME = 'api-gateway-2.0'
+        CONTEXT_PATH = 'api'
+        SERVER_PORT = '8765'
+        REPO_URL = 'https://github.com/SwarnadeepGhosh/Microservices'
+
+        REPO_CREDENTIAL = 'swarnadeep-vm-git-integration'
+        BASE_URL = 'https://swarnadeep.centralindia.cloudapp.azure.com'
+        DEPLOY_PATH = '/home/swarnadeep/deployments'
+        BACKUP_PATH = "${DEPLOY_PATH}/pipeline-backups"
+        LOG_PATH = "${DEPLOY_PATH}/logs"
+    }
+
+    stages {
+        // stage('Checkout') {
+        //     steps {
+        //         script {
+        //             // Checkout code from Azure DevOps repository
+        //             checkout([$class: 'GitSCM',
+        //                 branches: [[name: "*/${APP_BRANCH}"]],
+        //                 userRemoteConfigs: [[
+        //                     url: "${REPO_URL}",
+        //                     credentialsId: "${REPO_CREDENTIAL}"
+        //                 ]]
+        //             ])
+        //         }
+        //     }
+        // }
+
+        stage('Build') {
+            steps {
+                dir("${APP_NAME}") {
+                    sh 'mvn clean compile'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir("${APP_NAME}") {
+                    // sh 'mvn test jacoco:report'
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Sonar Scan') {
+            steps {
+                dir("${APP_NAME}") {
+                    sh '''
+                    sonar-scanner \
+                    -Dsonar.projectKey=${APP_NAME}-${APP_BRANCH} \
+                    -Dsonar.projectName=${APP_NAME}-${APP_BRANCH} \
+                '''
+                }
+            }
+        }
+
+        stage('Package') {
+            steps {
+                dir("${APP_NAME}") {
+                    sh 'mvn package -DskipTests'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                dir("${APP_NAME}") {
+                    script {
+                        // Install sshpass on the Jenkins server (optional if not already installed)
+                        // sh "sudo apt-get install -y sshpass"
+
+                        // Kill existing process on the target server
+                        // sh "sshpass -p '${DEPLOY_PASSWORD}' ssh ${DEPLOY_USER}@${DEPLOY_SERVER} 'kill -9 \$(lsof -t -i:${SERVER_PORT}) || true' || true"
+
+                        // Define the timestamp
+                        def timestamp = sh(script: "date +'%d-%m-%Y-%H:%M:%S'", returnStdout: true).trim()
+
+                        // Transfer the running JAR file to the backup folder with the timestamp in the filename
+                        sh "mv ${DEPLOY_PATH}/${JAR_NAME}.jar ${BACKUP_PATH}/${JAR_NAME}-${timestamp}.jar || true"
+
+                        // Transfer the new JAR file to the main deployment path
+                        sh "cp target/*.jar ${DEPLOY_PATH}/${JAR_NAME}.jar"
+
+                        // Run the application on the remote server
+                        // sh "sshpass -p '${DEPLOY_PASSWORD}' ssh ${DEPLOY_USER}@${DEPLOY_SERVER} 'nohup java -jar ${DEPLOY_PATH}/${JAR_NAME}.jar --httpPort=${SERVER_PORT} >> ${LOG_PATH}/${APP_NAME}.log &'"
+
+                        // Start the updated application using Supervisor
+                        sh "sudo supervisorctl restart ${APP_NAME}"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "********************************************"
+            echo "Deployment Successful !! "
+            echo "Deployed Backend Base URL :: ${BASE_URL}/${CONTEXT_PATH}"
+            echo "Deployed Backend Swagger URL :: ${BASE_URL}/${CONTEXT_PATH}/swagger-ui/index.html"
+            echo "Server Log path :: ${LOG_PATH}/${APP_NAME}.log"
+            echo "Monitoring link : https://swarnadeep.centralindia.cloudapp.azure.com/monitor/"
+        }
+        failure {
+            echo "********************************************"
+            echo "Deployment Failed !!!"
+            echo "Server Log path :: ${LOG_PATH}/${APP_NAME}.log"
+            echo "Monitoring link : https://swarnadeep.centralindia.cloudapp.azure.com/monitor/"
+        }
+    }
+}
