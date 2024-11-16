@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         APP_NAME = 'currency-conversion'
-        APP_BRANCH = 'dev'
+        APP_BRANCH = 'master'
         JAR_NAME = 'currency-conversion-2.0'
         CONTEXT_PATH = 'api'
         SERVER_PORT = '8100'
