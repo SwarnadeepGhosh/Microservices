@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = 'naming-server'
+        APP_NAME = 'currency-exchange'
         APP_BRANCH = 'dev'
-        JAR_NAME = 'naming-server-2.0'
-        CONTEXT_PATH = 'registry'
-        SERVER_PORT = '8761'
+        JAR_NAME = 'currency-exchange-2.0'
+        CONTEXT_PATH = 'api'
+        SERVER_PORT = '8000'
         REPO_URL = 'https://github.com/SwarnadeepGhosh/Microservices'
 
         REPO_CREDENTIAL = 'swarnadeep-vm-git-integration'
