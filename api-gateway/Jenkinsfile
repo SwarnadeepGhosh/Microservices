@@ -6,7 +6,7 @@ pipeline {
         CONTEXT_PATH = 'api'
         SERVER_PORT = '8765'
         APP_BRANCH = 'master'
-        JAR_NAME = "${APP_NAME}"
+        JAR_NAME = "${APP_NAME}-ms"
         REPO_URL = 'https://github.com/SwarnadeepGhosh/Microservices'
 
         REPO_CREDENTIAL = 'swarnadeep-vm-git-integration'
