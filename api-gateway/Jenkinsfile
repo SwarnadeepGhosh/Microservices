@@ -3,10 +3,10 @@ pipeline {
 
     environment {
         APP_NAME = 'api-gateway'
-        APP_BRANCH = 'master'
-        JAR_NAME = 'api-gateway-2.0'
         CONTEXT_PATH = 'api'
         SERVER_PORT = '8765'
+        APP_BRANCH = 'master'
+        JAR_NAME = "${APP_NAME}"
         REPO_URL = 'https://github.com/SwarnadeepGhosh/Microservices'
 
         REPO_CREDENTIAL = 'swarnadeep-vm-git-integration'

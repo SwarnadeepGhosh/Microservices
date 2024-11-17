@@ -3,10 +3,10 @@ pipeline {
 
     environment {
         APP_NAME = 'currency-exchange'
-        APP_BRANCH = 'master'
-        JAR_NAME = 'currency-exchange-2.0'
         CONTEXT_PATH = 'api'
         SERVER_PORT = '8000'
+        APP_BRANCH = 'master'
+        JAR_NAME = "${APP_NAME}"
         REPO_URL = 'https://github.com/SwarnadeepGhosh/Microservices'
 
         REPO_CREDENTIAL = 'swarnadeep-vm-git-integration'
