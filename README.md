@@ -2,6 +2,12 @@
 
 
 
+### Architecture - Currency Microservice Project
+
+<img src="images/Currency-Microservice-Diagram.jpg" alt="transport" style="zoom: 67%;" />
+
+
+
 ### Hosted URLs
 
 | Application                 | URL                                                          | Supervisor Application Name |

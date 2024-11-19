@@ -426,6 +426,12 @@ This is a older version compatible with Spring boot < 2.3.0, For newer Versions,
 
 
 
+### Architecture - Currency Microservice
+
+<img src="images/Currency-Microservice-Diagram.jpg" alt="transport" style="zoom: 67%;" />
+
+
+
 ## Currency Config Repository
 
 - [Git Repo Link](https://github.com/SwarnadeepGhosh/Microservices)
