@@ -58,3 +58,10 @@
 | Zipkin Distributed Tracing  | [http://localhost:9411/zipkin/](http://localhost:9411/zipkin/) |
 | Spring Cloud Bus Refresh    | http://localhost:8080/actuator/bus-refresh (POST)            |
 
+
+
+### Description
+
+This project demonstrates a robust **microservices-based architecture** for currency conversion using **Spring Boot** and **Spring Cloud** technologies. It includes service discovery, centralized configuration, API gateway, and distributed tracing with **Zipkin**, ensuring scalability and observability. Integrated with **DevOps tools** like Jenkins, SonarQube, and Supervisor, the services are deployed securely on **Azure VM** for seamless operation and monitoring.
+
+Tech Used : Spring Cloud API Gateway, Eureka Naming Server, Zipkin Distributed Tracing, Sonarqube, Jenkins, Tomcat, Supervisor Monitoring
